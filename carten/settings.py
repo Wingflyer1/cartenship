@@ -32,9 +32,11 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'registration',  #should be immediately above 'django.contrib.auth'
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
+    'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Local apps
@@ -58,7 +60,9 @@ ROOT_URLCONF = 'carten.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR), "carten/templates"],
+        
+
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -122,3 +126,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.10/howto/static-files/
 STATIC_ROOT = os.path.dirname(os.path.join(BASE_DIR, 'static/'))
 STATIC_URL = '/static/'
+
+# Crispy form tags settings
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
+
+
+# Django registration redux settings
+ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
+REGISTRATION_AUTO_LOGIN = True # Automatically log the user in.
+SITE_ID = 1 # this can be viewed in Admin --> Sites

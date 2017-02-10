@@ -21,4 +21,7 @@ admin.autodiscover()
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('VoyageCalc.urls', namespace='VoyageCalc')),
+
+    # Registration redux 
+    url(r'^accounts/', include('registration.backends.default.urls')),
 ]

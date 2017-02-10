@@ -14,3 +14,7 @@ body{
 #red {
 	color:red;
 }
+
+#hint_id_username, #hint_id_password2 {
+	color:white;
+}

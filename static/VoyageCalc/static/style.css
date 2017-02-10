@@ -15,6 +15,6 @@ body{
 	color:red;
 }
 
-th {
-	text-align: center;
+#hint_id_username, #hint_id_password2 {
+	color:white;
 }
