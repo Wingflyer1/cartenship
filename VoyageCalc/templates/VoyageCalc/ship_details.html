@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %} CartenCalc - Index 
+{% endblock title %}
+
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'VoyageCalc/static/style.css'%}" />
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-sm-8 col-sm-offset-2 col-xs-10" style="background-color:#495b5f; color:black;">
+                
+                <h1>{{ title }}</h1>
+
+                
+                <table class="table table-striped table-inverse">
+                    <thead>
+                        <tr>
+                            <th>C/S - IMOno</th>
+                            <th>MMSIno</th>
+                            <th>Length (m)</th>
+                            <th>Telephone</th>
+                            <th>Datasheet</th>
+                            
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        
+                            <tr>
+                                <td>{{ ship_data.0 }}</td>
+                                <td>{{ ship_data.1 }}</td>
+                                <td>{{ ship_data.2 }}</td>
+                                <td>{{ ship_data.7 }}</td>
+                                <td><a href="{{ ship_data.8 }}">Open Sheet</a></td>
+
+                            </tr>
+                          
+
+                    </tbody>
+                </table>
+                                <table class="table table-striped table-inverse">
+                    <thead>
+                        <tr>
+                            
+                            <th>Speed Loaden</th>
+                            <th>Speed Ballast</th>
+                            <th>Consumption Ballast</th>
+                            <th>Consumption Ballast</th>
+                            
+                            
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        
+                            <tr>
+                                
+                                <td>{{ ship_data.3 }}</td>
+                                <td>{{ ship_data.4 }}</td>
+                                <td>{{ ship_data.5 }}</td>
+                                <td>{{ ship_data.6 }}</td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="4" align="center"><button style="width:100%;"" class="btn btn-info" value="Update Vessel">Update Vessel</button></td>
+                            </tr>
+                         
+                    </tbody>
+                </table>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock body %}

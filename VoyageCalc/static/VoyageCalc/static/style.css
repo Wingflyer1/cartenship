@@ -1,0 +1,16 @@
+body{
+    background: #4e6881;
+    padding-top: 70px;
+}
+
+.navbar{
+    border-radius:0;
+}
+
+.control-group{
+	column-span:100%;
+}
+
+#red {
+	color:red;
+}

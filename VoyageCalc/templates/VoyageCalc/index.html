@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %} CartenCalc - Index 
+{% endblock title %}
+
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'VoyageCalc/static/style.css'%}" />
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-sm-10 col-sm-offset-1 col-xs-10" style="background-color:#495b5f; color:black;">
+                
+                <h1>{{ title }}</h1>
+
+                
+                <table class="table table-striped table-inverse">
+                    <thead>
+                        <tr>
+                            voynr, charterer, seadays, portdays, bunker, portcost, tc-eq
+                            <th>VoyNo</th>                                                 
+                            <th>Charterer</th>                           
+                            <th>Sea Days</th>
+                            <th>Port Days</th>
+                            <th>Bunkers</th>
+                            <th>Port Fee</th>
+                            <th>TC Eq</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for voyage in voyages %}
+                        
+                            <tr>
+                                <th><h4><a href="{% url 'VoyageCalc:chart_details' %}">{{ voyage.0}}</a></h4></th>
+                                <td>{{ voyage.1|truncatechars:9 }}</td>
+                                <td>{{ voyage.2 }} </td>
+                                <td>{{ voyage.3 }} </td>
+                                <td>{{ voyage.4 }} </td>
+                                <td>{{ voyage.5 }} </td>
+                                {% if voyage.6 > 0 %}
+                                    <td>{{ voyage.6 }} </td>
+                                {% else %}
+                                    <td style="color:red; font-weight: bold;">{{ voyage.6 }} </td>
+                                {% endif %}
+
+                                
+
+
+                                <!--<td>{{ voyage.14 }} </td>-->
+                            </tr>
+                          
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock body %}
