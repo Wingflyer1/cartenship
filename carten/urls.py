@@ -23,5 +23,4 @@ urlpatterns = [
     url(r'^', include('VoyageCalc.urls', namespace='VoyageCalc')),
 
     # Registration redux 
-    url(r'^accounts/', include('registration.backends.default.urls')),
-]
+    url(r'^accounts/', include('registration.backends.default.urls')),]
