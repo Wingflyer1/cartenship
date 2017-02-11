@@ -12,9 +12,7 @@ def index(request):
 	voyages = [['0255','Glencore', '5.5', '2', '87.0', '38500', 75000], 
 	           ['0256', 'Glencore', 'Carten Elina', '4.8', '1.3', '56', 65000],
 	           ['0257', 'South Pacific Trade Company', '2.1', '0', '22', '25000',-18000]]
-	user = request.user
-	if not user.is_authenticated:
-		return redirect('auth_login')		
+
 	context = {
 		'title': title,
 		'voyages': voyages,
@@ -105,7 +103,7 @@ def create_charterer(request):
 
         charterer.save()
 
-        return redirect("VoyageCalc:index")
+        return redirect("VoyageCale:index")
 
     context = {
         'form': form,

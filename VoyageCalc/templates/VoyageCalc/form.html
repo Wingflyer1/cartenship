@@ -13,7 +13,7 @@
           <h3 class="panel-title"> {{ title }} </h3>
         </div>
         <div class="panel-body">
-            <h1>{{ title }} </h1>
+            <h1>{{ title }}</h1>
                     <hr/>
                         <form method="POST" action="" enctype="multipart/form-data">
                             {% csrf_token %}
@@ -21,9 +21,8 @@
                             <input type = submit class="btn btn-success" style="width:100%; value="{{ sub_btn }}" />
                         </form>
                         {% if message %}<br/><br/>
-                            <a href="{% url 'accounts:registration_register' %}"><button class="btn btn-primary">Registrer deg!</button></a>
-                        {% endif %}      
-
+                            <a href="{% url 'accounts:register' %}"><button class="btn btn-success">Registrer deg!</button></a>
+                        {% endif %}
         </div>          
       </div>
          
