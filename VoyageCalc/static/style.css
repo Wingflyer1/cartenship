@@ -1,6 +1,7 @@
 body{
-    background: #4e6881;
+    background: #4e6881 url('../img/carten-maria.jpg');
     padding-top: 70px;
+    
 }
 
 .navbar{
@@ -17,4 +18,9 @@ body{
 
 #hint_id_username, #hint_id_password2 {
 	color:white;
+}
+
+#table-back {
+	background-color: #394b50;
+	color:black;
 }

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %} Vessel list {% endblock title %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+
+        <div id="table-back" class="col-sm-8 col-sm-offset-2 col-xs-10" >
+                
+                <h1> Vessel list </h1>
+
+                
+                <table class="table table-striped table-inverse">
+                    <thead>
+                        <tr>
+                            <th>Vessel</th>
+                            <th>Telephone</th>
+                            <th>Cons Laden</th>
+                            <th>Cons Ballast</th>
+                            <th>Cons Port MGO</th>
+                            <th>Cons Port IFO</th>
+                            <th>Comment</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        {% for object in object_list %}
+                        
+                            <tr>
+                                <td><a href="{% url 'VoyageCalc:edit-vessel' object.id %}">{{ object.name }}</a></td>
+                                <th>{{ object.telephone }}</th>
+                                <td>{{ object.cons_lad }}</td>
+                                <td>{{ object.cons_bal }}</td>
+                                <td>{{ object.cons_por_mgo }}</td>
+                                <td>{{ object.cons_por_ifo }}</td>
+                                <td>{{ object.comment|truncatechars:50 }}</td>
+                            </tr>
+                          
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+        </div>
+
+    </div>
+</div>
+
+{% endblock body %}

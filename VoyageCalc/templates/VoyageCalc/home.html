@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+
+{% block title %} CartenCalc - Index 
+{% endblock title %}
+
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{% static 'VoyageCalc/static/style.css'%}" />
+
+{% endblock %}
+
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-sm-6 col-sm-offset-3 col-xs-10" style="background-color:#495b5f; color:black; align-items: right;">
+
+                <h1 style="color:white; text-align:center;">Welcome to {{ title }} {% if user.is_authenticated %}
+                {{ user.name }} {% endif %} </h1>
+
+                <p><h3 style="text-align: center;">Please make your selection in the top menu.</h3></p>
+                {% if user.is_authenticated %}
+
+                {% else %}
+                
+                <p><h3>Please log in or register to continue.</h3></p>
+                {% endif %}
+               
+        </div>
+
+    </div>
+    </div>
+</div>
+
+{% endblock body %}

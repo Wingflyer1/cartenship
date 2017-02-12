@@ -2,23 +2,22 @@
 {% load staticfiles %}
 {% load crispy_forms_tags %}
 
-{% block style %}
-<link rel="stylesheet" type="text/css" href="{% static 'VoyageCalc/static/style.css'%}" />
-{% endblock %}
+{% block title %} C-Calc -> {{ title }}
+{% endblock title %}
+
 
 {% block body %}
 <div class="col-sm-4 col-sm-offset-4" align="center">
     <div class="panel panel-default">
         <div class="panel-heading">
-          <h3 class="panel-title"> {{ title }} </h3>
+          <div class="panel-title"><h1> {{ title }} </h1></div>
         </div>
         <div class="panel-body">
-            <h1>{{ title }} </h1>
-                    <hr/>
+            
                         <form method="POST" action="" enctype="multipart/form-data">
                             {% csrf_token %}
                             {{form|crispy}}
-                            <input type = submit class="btn btn-success" style="width:100%; value="{{ sub_btn }}" />
+                            <input type = submit class="btn btn-success" style="width:100%;" value="{{ sub_btn }}" />
                         </form>
                         {% if message %}<br/><br/>
                             <a href="{% url 'accounts:registration_register' %}"><button class="btn btn-primary">Registrer deg!</button></a>
@@ -26,10 +25,6 @@
 
         </div>          
       </div>
-         
-
-    
-
 </div>
 
 

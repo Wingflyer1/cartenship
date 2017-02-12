@@ -1,16 +1,39 @@
 from django.conf.urls import url
+from django.views.generic import ListView
 
 from . import views
+from .models import Charterer, Port, Vessel, Chart
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
+    # url(r'^$', views.home, name='index'),
+    url(r'^$', views.home, name='home'),
     url(r'^chart_details/$', views.chart_details, name="chart_details"),
     url(r'^ship_index/$', views.ship_index, name="ship_index"),
     url(r'^ship_details/$', views.ship_details, name="ship_details"),
 
     #charterer urls
     url(r'^create_charterer/$', views.create_charterer, name='create_charterer'),
-]
+    url(r'^charterer_list/$', ListView.as_view(queryset=Charterer.objects.all().order_by('name'), template_name="VoyageCalc/charterer_list.html"), name='charterer-list'),
+    url(r'^(?P<id>[0-9]+)/edit_charterer$', views.edit_charterer, name='edit-charterer'),
+
+    # port urls
+    url(r'^create_port/$', views.create_port, name='create_port'),
+    url(r'^port_list/$', ListView.as_view(queryset=Port.objects.all().order_by('name'), template_name="VoyageCalc/port_list.html"), name='port-list'),
+    url(r'^(?P<id>[0-9]+)/edit_port$', views.edit_port, name='edit-port'),
+
+    # vessel urls
+    url(r'^create_vessel/$', views.create_vessel, name='create_vessel'),
+    url(r'^vessel_list/$', ListView.as_view(queryset=Vessel.objects.all().order_by('name'), template_name="VoyageCalc/vessel_list.html"), name='vessel-list'),
+    url(r'^(?P<id>[0-9]+)/edit_vessel$', views.edit_vessel, name='edit-vessel'),
+
+    # chart urls
+    url(r'^create_chart/$', views.create_chart, name='create_chart'),
+    url(r'^chart_list/$', ListView.as_view(queryset=Chart.objects.all().order_by('id'), template_name="VoyageCalc/chart_list.html"), name='chart-list'),
+    url(r'^(?P<chart_number>[0-9]+)/edit_chart$', views.edit_chart, name='edit-chart'),
+    ]
+    
+
+
 
 
 
