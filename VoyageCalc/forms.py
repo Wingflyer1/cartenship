@@ -88,16 +88,16 @@ class ChartCreateForm(forms.ModelForm):
 
 class VoyageCreateForm(forms.ModelForm):
 
-    chart = forms.ModelChoiceField(queryset=Chart.objects.filter(deleted=False), empty_label=None)
-    vessel = forms.ModelChoiceField(queryset=Vessel.objects.filter(deleted=False), empty_label=None)
+    chart = forms.ModelChoiceField(queryset=Chart.objects.all(), empty_label=None)
+    vessel = forms.ModelChoiceField(queryset=Vessel.objects.all(), empty_label=None)
     lumpsum = forms.FloatField()
-    date_start = forms.DateField(widget=forms.DateInput, initial='DD MM YYYY')
-    date_end = forms.DateField(widget=forms.DateInput, initial='DD MM YYYY')
+    date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
+    date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     days_in_port = forms.CharField(required=False)
     days_at_sea = forms.CharField(required=False)
-    port_disp = forms.CharField(required=False, label="Port dispursement")
-    misc_exp = forms.FloatField(required=False, label="Misc expenses")
-    commision = forms.CharField(max_length=5, initial="%")
+    port_disp = forms.FloatField(label="Port dispursement")
+    misc_exp = forms.FloatField(label="Misc expenses")
+    commission = forms.FloatField(help_text="ie. 2.5")
     comment = forms.CharField(widget=forms.Textarea, required=False)
     finished = forms.BooleanField(required=False)
 
@@ -113,7 +113,7 @@ class VoyageCreateForm(forms.ModelForm):
                 'days_in_port',
                 'port_disp',
                 'misc_exp',
-                'commision',
+                'commission',
                 'comment',
                 'finished',
     ]

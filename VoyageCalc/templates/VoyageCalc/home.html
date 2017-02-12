@@ -7,7 +7,6 @@
 
 
 {% block style %}
-<link rel="stylesheet" type="text/css" href="{% static 'VoyageCalc/static/style.css'%}" />
 
 {% endblock %}
 
@@ -20,13 +19,13 @@
 
                 <h1 style="color:white; text-align:center;">Welcome to {{ title }} {% if user.is_authenticated %}
                 {{ user.name }} {% endif %} </h1>
-
-                <p><h3 style="text-align: center;">Please make your selection in the top menu.</h3></p>
                 {% if user.is_authenticated %}
+                <p><h3 style="text-align: center;">Please make your selection in the top menu.</h3></p>
+                
 
                 {% else %}
                 
-                <p><h3>Please log in or register to continue.</h3></p>
+                <p><h3 style="text-align: center;">Please log in or register to continue.</h3></p>
                 {% endif %}
                
         </div>

@@ -7,6 +7,7 @@
 {% block body %}
 <div class="container-fluid">
     <div class="row">
+    {% if user.is_authenticated %}
 
         <div id="table-back" class="col-sm-8 col-sm-offset-2 col-xs-10" >
                 
@@ -41,6 +42,9 @@
                 </table>
 
         </div>
+        {% else %}
+        {% include "VoyageCalc/home.html" %}
+        {% endif %}
 
     </div>
 </div>

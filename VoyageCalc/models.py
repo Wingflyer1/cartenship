@@ -87,6 +87,7 @@ class Vessel(models.Model):
 class Chart(models.Model):
     name = models.CharField(max_length=50, blank=True)
     charterer = models.ForeignKey(Charterer, on_delete=models.CASCADE)
+    ports = models.ManyToManyField(Port)
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
     comment = models.TextField(blank=True)
@@ -98,37 +99,37 @@ class Chart(models.Model):
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.id
+        return "{} --> ({})".format(self.name, self.charterer)
 
     def __unicode__(self):
-        return self.id
+        return "{} --> ({})".format(self.name, self.charterer)
 
     class Meta:
-        ordering = ['-id']
+        ordering = ['name']
 
 class Voyage(models.Model):
 
     chart = models.ForeignKey(Chart, on_delete=models.CASCADE)
     vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
-    lumpsum = models.FloatField(default=0)
+    lumpsum = models.FloatField()
     date_start = models.DateField()
     date_end = models.DateField()
-    days_at_sea = models.FloatField(blank=True, default=0)
-    days_in_port = models.FloatField(blank=True, default=0)
-    port_disp = models.FloatField(blank=True, default=0)
-    misc_exp = models.FloatField(blank=True, default=0)
-    comission = models.CharField(max_length=5, blank=True, default=0)
-    comment = models.TextField(blank=True)
+    days_at_sea = models.FloatField()
+    days_in_port = models.FloatField()
+    port_disp = models.FloatField()
+    misc_exp = models.FloatField()
+    comission = models.CharField(max_length=5, default=0)
+    comment = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
-    finished = models.BooleanField(default=False)
-    deleted = models.BooleanField(default=False)
+    finished = models.BooleanField()
+    deleted = models.BooleanField()
 
-    def __str__(self):
-        return self.id
+    def __str__(self):  
+        return '{}'.format(self.id)
 
     def __unicode__(self):
-        return self.id
+        return '{}'.format(self.id)
 
     class Meta:
         ordering = ['-id']

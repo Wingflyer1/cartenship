@@ -1,5 +1,5 @@
 body{
-    background: #4e6881 url('../img/carten-maria.jpg');
+    background-color: #394b50;
     padding-top: 70px;
     
 }
@@ -19,6 +19,12 @@ body{
 #hint_id_username, #hint_id_password2 {
 	color:white;
 }
+
+#table-back {
+	background-color: #394b50;
+	color:black;
+}
+
 
 #table-back {
 	background-color: #394b50;

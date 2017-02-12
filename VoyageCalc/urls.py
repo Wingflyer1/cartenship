@@ -5,11 +5,8 @@ from . import views
 from .models import Charterer, Port, Vessel, Chart, Voyage
 
 urlpatterns = [
-    # url(r'^$', views.home, name='index'),
+    # startpage
     url(r'^$', views.home, name='home'),
-    url(r'^chart_details/$', views.chart_details, name="chart_details"),
-    url(r'^ship_index/$', views.ship_index, name="ship_index"),
-    url(r'^ship_details/$', views.ship_details, name="ship_details"),
 
     #charterer urls
     url(r'^create_charterer/$', views.create_charterer, name='create_charterer'),
@@ -34,9 +31,9 @@ urlpatterns = [
     
     # voyage urls
     url(r'^create_voyage/$', views.create_voyage, name='create_voyage'),
-    url(r'^voyage_list/$', ListView.as_view(queryset=Voyage.objects.filter(finished=False).order_by('-id'), template_name="VoyageCalc/voyage_list.html"), name='voyage-list'),
-    url(r'^voyage_list_finished/$', ListView.as_view(queryset=Voyage.objects.filter(finished=True).order_by('-id'), template_name="VoyageCalc/voyage_list_finished.html"), name='finished-voyages'),
-    url(r'^(?P<id>[0-9]+)/edit_voyage$', views.edit_voyage, name='edit-voyage'),
+    url(r'^voyage_list/$', ListView.as_view(queryset=Voyage.objects.all().order_by('-id'), template_name="VoyageCalc/voyage_list.html"), name='voyage-list'),
+    url(r'^voyage_list_finished/$', ListView.as_view(queryset=Voyage.objects.all().order_by('-id'), template_name="VoyageCalc/voyage_list_finished.html"), name='finished-voyages'),
+    url(r'^(?P<voy_num>[0-9]+)/edit_voyage$', views.edit_voyage, name='edit-voyage'),
     ]
 
 
