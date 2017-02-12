@@ -59,6 +59,9 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+include/
+Scripts/
+migrations/
 bin/
 build/
 develop-eggs/
