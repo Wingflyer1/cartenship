@@ -93,11 +93,11 @@ class VoyageCreateForm(forms.ModelForm):
     lumpsum = forms.FloatField()
     date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
-    days_in_port = forms.CharField(required=False)
-    days_at_sea = forms.CharField(required=False)
+    days_in_port = forms.FloatField()
+    days_at_sea = forms.FloatField()
     port_disp = forms.FloatField(label="Port dispursement")
     misc_exp = forms.FloatField(label="Misc expenses")
-    commission = forms.FloatField(help_text="ie. 2.5")
+    comission = forms.FloatField(help_text="ie. 2.5")
     comment = forms.CharField(widget=forms.Textarea, required=False)
     finished = forms.BooleanField(required=False)
 
@@ -113,7 +113,7 @@ class VoyageCreateForm(forms.ModelForm):
                 'days_in_port',
                 'port_disp',
                 'misc_exp',
-                'commission',
+                'comission',
                 'comment',
                 'finished',
     ]

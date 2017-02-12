@@ -31,9 +31,9 @@ urlpatterns = [
     
     # voyage urls
     url(r'^create_voyage/$', views.create_voyage, name='create_voyage'),
-    url(r'^voyage_list/$', ListView.as_view(queryset=Voyage.objects.all().order_by('-id'), template_name="VoyageCalc/voyage_list.html"), name='voyage-list'),
-    url(r'^voyage_list_finished/$', ListView.as_view(queryset=Voyage.objects.all().order_by('-id'), template_name="VoyageCalc/voyage_list_finished.html"), name='finished-voyages'),
-    url(r'^(?P<voy_num>[0-9]+)/edit_voyage$', views.edit_voyage, name='edit-voyage'),
+    url(r'^voyage_list/$', ListView.as_view(queryset=Voyage.objects.filter(finished=False).order_by('-id'), template_name="VoyageCalc/voyage_list.html"), name='voyage-list'),
+    url(r'^voyage_list_finished/$', ListView.as_view(queryset=Voyage.objects.filter(finished=False).order_by('-id'), template_name="VoyageCalc/voyage_list_finished.html"), name='finished-voyages'),
+    url(r'^(?P<id>[0-9]+)/edit_voyage$', views.edit_voyage, name='edit-voyage'),
     ]
 
 

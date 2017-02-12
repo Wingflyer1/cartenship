@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Charterer, Port, Vessel, Chart
+from .models import Charterer, Port, Vessel, Chart, Voyage
 from .forms import ChartererCreateForm, PortCreateForm, VesselCreateForm, ChartCreateForm, VoyageCreateForm 
 
 from django.contrib.auth.models import User
@@ -133,6 +133,9 @@ def create_chart(request):
 
         charterer = form.cleaned_data.get('charterer')
         chart.charterer = charterer
+
+        ports = form.cleaned_data.get('ports')
+        chart.ports = ports
         
         date_start = form.cleaned_data.get('date_start')
         chart.date_start = date_start
@@ -177,6 +180,9 @@ def edit_chart(request, id=None):
         # insert form data to object
         charterer = form.cleaned_data.get('charterer')
         chart.charterer = charterer
+
+        ports = form.cleaned_data.get('ports')
+        chart.ports = ports
         
         date_start = form.cleaned_data.get('date_start')
         chart.date_start = date_start

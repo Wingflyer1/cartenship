@@ -104,6 +104,9 @@ class Chart(models.Model):
     def __unicode__(self):
         return "{} --> ({})".format(self.name, self.charterer)
 
+    def num_ports(self):
+        return self.ports
+
     class Meta:
         ordering = ['name']
 
@@ -118,18 +121,27 @@ class Voyage(models.Model):
     days_in_port = models.FloatField()
     port_disp = models.FloatField()
     misc_exp = models.FloatField()
-    comission = models.CharField(max_length=5, default=0)
+    comission = models.FloatField(default=0.0)
     comment = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     finished = models.BooleanField()
-    deleted = models.BooleanField()
 
     def __str__(self):  
         return '{}'.format(self.id)
 
     def __unicode__(self):
         return '{}'.format(self.id)
+
+    def voyage_ports(self):
+        ports = self.chart.ports       
+        return ports
+
+    def gross_freight(self):
+        result = self.lumpsum-self.port_disp-self.misc_exp
+        commission = result*(self.comment/100)
+        return result-commission
+
 
     class Meta:
         ordering = ['-id']

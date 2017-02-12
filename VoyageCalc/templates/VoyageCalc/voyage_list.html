@@ -9,7 +9,7 @@
     <div class="row">
         {% if user.is_authenticated %}
 
-        <div id="table-back" class="col-sm-8 col-sm-offset-2 col-xs-10" >
+        <div id="table-back" class="col-sm-10 col-sm-offset-1 col-xs-10" >
                 
                 <h1> List of Voyages <a href="{% url 'VoyageCalc:create_voyage' %}"><h4>(Add a voyage)</h4></a></h1>
 
@@ -21,12 +21,13 @@
                             <th>Charterer</th>
                             <th>Start Date</th>
                             <th>End Date</th>
+                            <th>Ports</th>
                             <th>Bunker</th>
                             <th>Port Cost</th>
                             <th>Commision</th>
                             <th>Gross Freight</th>
                             <th>Comment</th>
-                            <th>Creator</th>
+                            <th>User</th>
                             
 
                         </tr>
@@ -34,18 +35,14 @@
 
                     <tbody>
                         {% for object in object_list %}
-                        
                             <tr>
-                                <td><a href="{% url 'VoyageCalc:edit-chart' object.voy_num %}">{{ object.voy_num }}</a></td>
-                                <td>{{ object.charterer }}</td>
+                                <td><a href="{% url 'VoyageCalc:edit-voyage' object.id %}">{{ object.id }}</a></td>
+                                <td>{{ object.chart.charterer }}</td>
                                 <td>{{ object.date_start }}</td>
                                 <td>{{ object.date_end }}</td>
-                                {% if object.updated_by %}
-                                <td>{{ object.created_by }} / {{ object.updated_by }} </td>
-                                {% else %}
-                                <td>{{ object.created_by.name }}</td>
-                                {% endif %}
+                                <td>{{ object.voyage_ports }} her skal det stå antall havner</td>
                                 <td>{{ object.comment|truncatechars:50 }}</td>
+                                <td>{{ object.created_by }}</td>
                             </tr>
                           
                         {% endfor %}
