@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import date, timedelta
 
 class Port(models.Model):
 
@@ -65,10 +66,14 @@ class Vessel(models.Model):
 
     name = models.CharField(max_length=250)
     telephone = models.CharField(max_length=250, blank=True)
+    bunker_price_mgo = models.FloatField(default=0, blank=True)
+    bunker_price_ifo = models.FloatField(default=0, blank=True)
+
     cons_lad = models.FloatField(default=0, blank=True)
     cons_bal = models.FloatField(default=0, blank=True)
     cons_por_mgo = models.FloatField(default=0, blank=True)
     cons_por_ifo = models.FloatField(default=0, blank=True)
+
     comment = models.TextField(blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)     
@@ -104,43 +109,91 @@ class Chart(models.Model):
     def __unicode__(self):
         return "{} --> ({})".format(self.name, self.charterer)
 
-    def num_ports(self):
-        return self.ports
-
     class Meta:
         ordering = ['name']
 
 class Voyage(models.Model):
-
+    # relations
     chart = models.ForeignKey(Chart, on_delete=models.CASCADE)
     vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
+    # income
     lumpsum = models.FloatField()
+    other_inc = models.FloatField()
+    # duration
     date_start = models.DateField()
     date_end = models.DateField()
-    days_at_sea = models.FloatField()
-    days_in_port = models.FloatField()
+    # bunkers
+    days_at_sea_laden = models.FloatField(blank=True, default=0)
+    days_at_sea_ballast = models.FloatField(blank=True, default=0)
+    days_in_port_mgo = models.FloatField(blank=True, default=0)
+    days_in_port_ifo = models.FloatField(blank=True, default=0)
+    # expenses
     port_disp = models.FloatField()
     misc_exp = models.FloatField()
-    comission = models.FloatField(default=0.0)
+    commission = models.FloatField(default=0.0)
+
     comment = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="voy_updated_by")
+    updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
     finished = models.BooleanField()
 
-    def __str__(self):  
+    def __str__(self):
         return '{}'.format(self.id)
 
     def __unicode__(self):
         return '{}'.format(self.id)
 
-    def voyage_ports(self):
-        ports = self.chart.ports       
-        return ports
+    def ports(self):
+        result = self.chart.ports.all()
+        return result
+
+    def duration(self):
+        d0 = self.date_start
+        d1 = self.date_end
+        delta = d1-d0
+        tdelta = delta.days
+
+        return float(tdelta)
 
     def gross_freight(self):
-        result = self.lumpsum-self.port_disp-self.misc_exp
-        commission = result*(self.comment/100)
-        return result-commission
+        return self.lumpsum + self.other_inc
+
+    def commission(self):
+        gross_freight = self.gross_freight()
+        try:
+            result = (self.commission/100)*gross_freight
+        except:
+            result = 0
+        return result
+
+    def bunkers(self):
+        sea_lad = self.vessel.cons_lad*self.days_at_sea_laden
+        sea_bal = self.vessel.cons_bal*self.days_at_sea_ballast
+        port_mgo = self.vessel.cons_por_mgo*self.days_in_port_mgo
+        port_ifo = self.vessel.cons_por_ifo*self.days_in_port_ifo
+        result = sea_lad + sea_bal + port_mgo + port_ifo
+        return result
+
+    def total_exp(self):
+        return float(self.bunkers()+self.commission()+self.port_disp+self.misc_exp)
+
+    def net_freight(self):
+        return float(self.gross_freight()-self.total_exp())
+
+    def tc_eq(self):
+        duration = self.duration()
+        return float(self.net_freight()/duration)
+
+
+
+
+        cost = self.port_disp+self.misc_exp
+
+        
+
+        return str(result-commission)
 
 
     class Meta:

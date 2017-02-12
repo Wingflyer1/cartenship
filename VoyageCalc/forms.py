@@ -45,7 +45,10 @@ class VesselCreateForm(forms.ModelForm):
 
     name = forms.CharField(max_length=250, label='Vessel name')
     telephone = forms.CharField(max_length=250, required=False)
-    cons_lad = forms.FloatField(label='Consumption Laden')    
+    bunker_price_mgo = forms.FloatField(initial=0)
+    bunker_price_ifo = forms.FloatField(initial=0)
+
+    cons_lad = forms.FloatField(label='Consumption Laden')
     cons_bal = forms.FloatField(label='Consumption Ballast')
     cons_por_mgo = forms.FloatField(label='Consumption Port MGO')
     cons_por_ifo = forms.FloatField(label='Consumption Port IFO')
@@ -90,14 +93,22 @@ class VoyageCreateForm(forms.ModelForm):
 
     chart = forms.ModelChoiceField(queryset=Chart.objects.all(), empty_label=None)
     vessel = forms.ModelChoiceField(queryset=Vessel.objects.all(), empty_label=None)
+
     lumpsum = forms.FloatField()
+    other_inc = forms.FloatField()
+
     date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
-    days_in_port = forms.FloatField()
-    days_at_sea = forms.FloatField()
+    
+    days_at_sea_laden = forms.FloatField()
+    days_at_sea_ballast = forms.FloatField()
+    days_in_port_mgo = forms.FloatField()
+    days_in_port_ifo = forms.FloatField()
+
     port_disp = forms.FloatField(label="Port dispursement")
     misc_exp = forms.FloatField(label="Misc expenses")
-    comission = forms.FloatField(help_text="ie. 2.5")
+    commission = forms.FloatField(help_text="ie. 2.5")
+
     comment = forms.CharField(widget=forms.Textarea, required=False)
     finished = forms.BooleanField(required=False)
 
@@ -106,14 +117,22 @@ class VoyageCreateForm(forms.ModelForm):
         fields = [
                 'chart',
                 'vessel',
+
                 'lumpsum',
+                'other_inc',
+
                 'date_start',
                 'date_end',
-                'days_at_sea',
-                'days_in_port',
+
+                'days_at_sea_laden',
+                'days_at_sea_ballast',
+                'days_in_port_mgo',
+                'days_in_port_ifo',
+
                 'port_disp',
                 'misc_exp',
-                'comission',
+                'commission',
+
                 'comment',
                 'finished',
     ]

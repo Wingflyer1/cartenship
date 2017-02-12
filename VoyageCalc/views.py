@@ -444,14 +444,17 @@ def create_voyage(request):
         user_logged_in = request.user
         voyage = form.save(commit=False)
 
-        created_by = user_logged_in
-        voyage.created_by = created_by
-
         chart = form.cleaned_data.get('chart')
         voyage.chart = chart
+
+        vessel = form.cleaned_data.get('vessel')
+        voyage.vessel = vessel
         
         lumpsum = form.cleaned_data.get('lumpsum')
         voyage.lumpsum = lumpsum
+
+        other_inc = form.cleaned_data.get('other_inc')
+        voyage.other_inc = other_inc
 
         date_start = form.cleaned_data.get('date_start')
         voyage.date_start = date_start
@@ -459,11 +462,17 @@ def create_voyage(request):
         date_end = form.cleaned_data.get('date_end')
         voyage.date_end = date_end
 
-        days_at_sea = form.cleaned_data.get('days_at_sea')
-        voyage.days_at_sea = days_at_sea
+        days_at_sea_laden = form.cleaned_data.get('days_at_sea_laden')
+        voyage.days_at_sea_laden = days_at_sea_laden
 
-        days_in_port = form.cleaned_data.get('days_in_port')
-        voyage.days_in_port = days_in_port
+        days_at_sea_ballast = form.cleaned_data.get('days_at_sea_ballast')
+        voyage.days_at_sea_ballast = days_at_sea_ballast
+
+        days_in_port_mgo = form.cleaned_data.get('days_in_port_mgo')
+        voyage.days_in_port_mgo = days_in_port_mgo
+
+        days_in_port_ifo = form.cleaned_data.get('days_in_port_ifo')
+        voyage.days_in_port_ifo = days_in_port_ifo
 
         port_disp = form.cleaned_data.get('port_disp')
         voyage.port_disp = port_disp
@@ -471,9 +480,12 @@ def create_voyage(request):
         misc_exp = form.cleaned_data.get('misc_exp')
         voyage.misc_exp = misc_exp
 
-        comission = form.cleaned_data.get('comission')
-        voyage.comission = comission
+        commission = form.cleaned_data.get('commission')
+        voyage.commission = commission
 
+        created_by = user_logged_in
+        voyage.created_by = created_by
+        
         comment = form.cleaned_data.get('comment')
         voyage.comment = comment
 
@@ -490,11 +502,11 @@ def create_voyage(request):
     return render(request, "VoyageCalc/form.html", context)
 
 def edit_voyage(request, id=None):
-    title = 'Update Voyage'
-    voyage = Voyage.objects.get(id=id)
+    title = 'Edit Voyage'
+    voyage = Voyage.objects.filter(id=id)
     form = VoyageCreateForm(request.POST or None, instance=voyage)
     user = request.user
-    sub_btn = "Update Voyage"
+    sub_btn = "Save changes"
     
     if not user.is_authenticated:
         return redirect('/')
@@ -504,41 +516,53 @@ def edit_voyage(request, id=None):
         user_logged_in = request.user
         voyage = form.save(commit=False)
 
-        created_by = user_logged_in
-        voyage.created_by = created_by
+        updated_by = user_logged_in
+        voyage.updated_by = updated_by
 
         chart = form.cleaned_data.get('chart')
         voyage.chart = chart
+
+        vessel = form.cleaned_data.get('vessel')
+        voyage.vessel = vessel
         
-        vessel = form.cleaned_data.get('price')
-        voyage.price = price
+        lumpsum = form.cleaned_data.get('lumpsum')
+        voyage.lumpsum = lumpsum
 
-        # price = form.cleaned_data.get('vessel')
-        # voyage.vessel = vessel
+        other_inc = form.cleaned_data.get('other_inc')
+        voyage.other_inc = other_inc
 
-        # lumpsum = form.cleaned_data.get('lumpsum')
-        # voyage.lumpsum = lumpsum
+        date_start = form.cleaned_data.get('date_start')
+        voyage.date_start = date_start
 
-        # date_start = form.cleaned_data.get('date_start')
-        # voyage.date_start = date_start
+        date_end = form.cleaned_data.get('date_end')
+        voyage.date_end = date_end
 
-        # date_end = form.cleaned_data.get('date_end')
-        # voyage.date_end = date_end
+        days_at_sea_laden = form.cleaned_data.get('days_at_sea_laden')
+        voyage.days_at_sea_laden = days_at_sea_laden
 
-        # days_at_sea = form.cleaned_data.get('days_at_sea')
-        # voyage.days_at_sea = days_at_sea
+        days_at_sea_ballast = form.cleaned_data.get('days_at_sea_ballast')
+        voyage.days_at_sea_ballast = days_at_sea_ballast
 
-        # days_in_port = form.cleaned_data.get('days_in_port')
-        # voyage.days_in_port = days_in_port
+        days_in_port_mgo = form.cleaned_data.get('days_in_port_mgo')
+        voyage.days_in_port_mgo = days_in_port_mgo
 
-        # extra_port_cost = form.cleaned_data.get('extra_port_cost')
-        # voyage.extra_port_cost = extra_port_cost
+        days_in_port_ifo = form.cleaned_data.get('days_in_port_ifo')
+        voyage.days_in_port_ifo = days_in_port_ifo
 
-        # comission = form.cleaned_data.get('comission')
-        # voyage.comission = comission
+        port_disp = form.cleaned_data.get('port_disp')
+        voyage.port_disp = port_disp
 
-        # comment = form.cleaned_data.get('comment')
-        # voyage.comment = comment
+        misc_exp = form.cleaned_data.get('misc_exp')
+        voyage.misc_exp = misc_exp
+
+        commission = form.cleaned_data.get('commission')
+        voyage.commission = commission
+
+        updated_by = user_logged_in
+        voyage.updated_by = updated_by
+        
+        comment = form.cleaned_data.get('comment')
+        voyage.comment = comment
 
         voyage.save()
 
