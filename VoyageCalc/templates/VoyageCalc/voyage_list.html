@@ -10,18 +10,18 @@
 
         <div id="table-back" class="col-sm-8 col-sm-offset-2 col-xs-10" >
                 
-                <h1> List of Charts <a href="{% url 'VoyageCalc:create_chart' %}"><h4>(Add a chart)</h4></a></h1><a href="{% url 'VoyageCalc:finished-charts' %}"> (view finished charts)</a>
+                <h1> List of Voyages <a href="{% url 'VoyageCalc:create_voyage' %}"><h4>(Add a voyage)</h4></a></h1>
 
                 
                 <table class="table table-striped table-inverse">
                     <thead>
                         <tr>
-                            <th>Chart No</th>
+                            <th>Voyage No</th>
                             <th>Charterer</th>
                             <th>Start Date</th>
                             <th>End Date</th>
-                            <th>Countdown</th>
-                            <th>Creator/Updated</th>
+                            
+                            <th>Creator</th>
                             <th>Comment</th>
                             
 
@@ -35,8 +35,7 @@
                                 <td><a href="{% url 'VoyageCalc:edit-chart' object.id %}">{{ object.id }}</a></td>
                                 <td>{{ object.charterer }}</td>
                                 <td>{{ object.date_start }}</td>
-                                <td>{{ object.date_end }}</td>                                
-                                <td>{{ object.date_end|timeuntil }}</td>
+                                <td>{{ object.date_end }}</td>   
                                 {% if object.updated_by %}
                                 <td>{{ object.created_by }} / {{ object.updated_by }} </td>
                                 {% else %}

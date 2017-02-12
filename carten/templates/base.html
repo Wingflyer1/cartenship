@@ -48,7 +48,7 @@
             <ul class="nav navbar-nav">
                 {% if user.is_authenticated %}
                 <li class="">
-                    <a href="{% url 'VoyageCalc:home' %}">
+                    <a href="{% url 'VoyageCalc:voyage-list' %}">
                         <span class="glyphicon glyphicon-book" aria-hidden="true"></span>&nbsp;
                         Voyages
                     </a>
@@ -88,7 +88,7 @@
 
                 {% if user.is_authenticated %}
                 <li class="">
-                    <a href="{% url 'VoyageCalc:create_chart' %}">
+                    <a href="{% url 'VoyageCalc:create_voyage' %}">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;
                         Voyage
                     </a>

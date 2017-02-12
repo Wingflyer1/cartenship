@@ -5,11 +5,11 @@ from .models import Charterer, Port, Vessel, Chart, Voyage
 
 class ChartererCreateForm(forms.ModelForm):
 
-    name = forms.CharField(max_length=250, label='Name')
-    address = forms.CharField(max_length=250, label='Address')
-    country = forms.CharField(max_length=250, label='Country')
-    switch_board = forms.CharField(max_length=250, label='Phone')
-    contact_person = forms.CharField(max_length=250, label='Contact Person')
+    name = forms.CharField(max_length=250, label='Name', initial='Company Name')
+    address = forms.CharField(max_length=250, label='Address', required=False)
+    country = forms.CharField(max_length=250, label='Country', required=False)
+    switch_board = forms.CharField(max_length=250, label='Phone', required=False)
+    contact_person = forms.CharField(max_length=250, label='Contact Person', required=False)
     comment = forms.CharField(widget=forms.Textarea, required=False)
 
     class Meta:
@@ -25,8 +25,8 @@ class ChartererCreateForm(forms.ModelForm):
 
 class PortCreateForm(forms.ModelForm):
 
-    name = forms.CharField(max_length=250)
-    price = forms.CharField(max_length=250)    
+    name = forms.CharField(max_length=250, initial="Port name")
+    price = forms.FloatField()
     contact_person = forms.CharField(max_length=250, required=False, label='Contact Person')
     telephone = forms.CharField(max_length=250, required=False)
     comment = forms.CharField(widget=forms.Textarea, required=False)
@@ -45,10 +45,10 @@ class VesselCreateForm(forms.ModelForm):
 
     name = forms.CharField(max_length=250, label='Vessel name')
     telephone = forms.CharField(max_length=250, required=False)
-    cons_lad = forms.CharField(max_length=250, label='Consumption Laden')    
-    cons_bal = forms.CharField(max_length=250, label='Consumption Ballast')
-    cons_por_mgo = forms.CharField(max_length=250, label='Consumption Port MGO')
-    cons_por_ifo = forms.CharField(max_length=250, label='Consumption Port IFO')
+    cons_lad = forms.FloatField(label='Consumption Laden')    
+    cons_bal = forms.FloatField(label='Consumption Ballast')
+    cons_por_mgo = forms.FloatField(label='Consumption Port MGO')
+    cons_por_ifo = forms.FloatField(label='Consumption Port IFO')
     comment = forms.CharField(widget=forms.Textarea, required=False, initial='Who is master?')
 
     class Meta:
@@ -65,44 +65,55 @@ class VesselCreateForm(forms.ModelForm):
 
 class ChartCreateForm(forms.ModelForm):
 
-    name = forms.CharField(required=False)
+    name = forms.CharField(max_length=150, required=True)
     charterer = forms.ModelChoiceField(queryset=Charterer.objects.all(), empty_label=None)
     ports = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple(), queryset=Port.objects.filter(deleted=False))
-    date_start = forms.DateField(widget=forms.DateInput, initial='DD MM YYYY')
-    date_end = forms.DateField(widget=forms.DateInput, initial='DD MM YYYY')
+    date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
+    date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     comment = forms.CharField(widget=forms.Textarea, required=False)
+    finished = forms.BooleanField(required=False)
+
 
     class Meta:
         model = Chart
         fields = [
             'name',
             'charterer',
+            'ports',
             'date_start',
             'date_end',
-            'comment',      
+            'comment',
+            'finished',
         ]
 
 class VoyageCreateForm(forms.ModelForm):
 
     chart = forms.ModelChoiceField(queryset=Chart.objects.filter(deleted=False), empty_label=None)
     vessel = forms.ModelChoiceField(queryset=Vessel.objects.filter(deleted=False), empty_label=None)
+    lumpsum = forms.FloatField()
     date_start = forms.DateField(widget=forms.DateInput, initial='DD MM YYYY')
     date_end = forms.DateField(widget=forms.DateInput, initial='DD MM YYYY')
     days_in_port = forms.CharField(required=False)
     days_at_sea = forms.CharField(required=False)
-    extra_cost = forms.CharField(required=False)
+    port_disp = forms.CharField(required=False, label="Port dispursement")
+    misc_exp = forms.FloatField(required=False, label="Misc expenses")
     commision = forms.CharField(max_length=5, initial="%")
     comment = forms.CharField(widget=forms.Textarea, required=False)
+    finished = forms.BooleanField(required=False)
 
     class Meta:   
         model = Voyage
         fields = [
                 'chart',
                 'vessel',
+                'lumpsum',
                 'date_start',
                 'date_end',
-                'days_in_port',
                 'days_at_sea',
-                'extra_cost',
+                'days_in_port',
+                'port_disp',
+                'misc_exp',
+                'commision',
                 'comment',
+                'finished',
     ]

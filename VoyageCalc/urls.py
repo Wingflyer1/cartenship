@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.views.generic import ListView
 
 from . import views
-from .models import Charterer, Port, Vessel, Chart
+from .models import Charterer, Port, Vessel, Chart, Voyage
 
 urlpatterns = [
     # url(r'^$', views.home, name='index'),
@@ -28,10 +28,16 @@ urlpatterns = [
 
     # chart urls
     url(r'^create_chart/$', views.create_chart, name='create_chart'),
-    url(r'^chart_list/$', ListView.as_view(queryset=Chart.objects.all().order_by('id'), template_name="VoyageCalc/chart_list.html"), name='chart-list'),
-    url(r'^(?P<chart_number>[0-9]+)/edit_chart$', views.edit_chart, name='edit-chart'),
-    ]
+    url(r'^chart_list/$', ListView.as_view(queryset=Chart.objects.filter(finished=False).order_by('-id'), template_name="VoyageCalc/chart_list.html"), name='chart-list'),
+    url(r'^chart_list_finished/$', ListView.as_view(queryset=Chart.objects.filter(finished=True).order_by('-id'), template_name="VoyageCalc/chart_list_finished.html"), name='finished-charts'),
+    url(r'^(?P<id>[0-9]+)/edit_chart$', views.edit_chart, name='edit-chart'),
     
+    # voyage urls
+    url(r'^create_voyage/$', views.create_voyage, name='create_voyage'),
+    url(r'^voyage_list/$', ListView.as_view(queryset=Voyage.objects.filter(finished=False).order_by('-id'), template_name="VoyageCalc/voyage_list.html"), name='voyage-list'),
+    url(r'^voyage_list_finished/$', ListView.as_view(queryset=Voyage.objects.filter(finished=True).order_by('-id'), template_name="VoyageCalc/voyage_list_finished.html"), name='finished-voyages'),
+    url(r'^(?P<id>[0-9]+)/edit_voyage$', views.edit_voyage, name='edit-voyage'),
+    ]
 
 
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Charterer, Port, Vessel, Chart
-from .forms import ChartererCreateForm, PortCreateForm, VesselCreateForm, ChartCreateForm
+from .forms import ChartererCreateForm, PortCreateForm, VesselCreateForm, ChartCreateForm, VoyageCreateForm 
 
 from django.contrib.auth.models import User
 
@@ -442,3 +442,128 @@ def edit_port(request, id=None):
 
     return render(request, "VoyageCalc/form.html", context)
 
+# voyage views
+def create_voyage(request):
+    title = 'New Voyage'
+    form = VoyageCreateForm(request.POST or None)
+    user = request.user
+    sub_btn = "Add Voyage"
+    
+    if not user.is_authenticated:
+        return redirect('/')
+    
+
+    if form.is_valid():
+        user_logged_in = request.user
+        voyage = form.save(commit=False)
+
+        created_by = user_logged_in
+        voyage.created_by = created_by
+
+        chart = form.cleaned_data.get('chart')
+        voyage.chart = chart
+        
+        vessel = form.cleaned_data.get('price')
+        voyage.price = price
+
+        price = form.cleaned_data.get('vessel')
+        voyage.vessel = vessel
+
+        lumpsum = form.cleaned_data.get('lumpsum')
+        voyage.lumpsum = lumpsum
+
+        date_start = form.cleaned_data.get('date_start')
+        voyage.date_start = date_start
+
+        date_end = form.cleaned_data.get('date_end')
+        voyage.date_end = date_end
+
+        days_at_sea = form.cleaned_data.get('days_at_sea')
+        voyage.days_at_sea = days_at_sea
+
+        days_in_port = form.cleaned_data.get('days_in_port')
+        voyage.days_in_port = days_in_port
+
+        extra_port_cost = form.cleaned_data.get('extra_port_cost')
+        voyage.extra_port_cost = extra_port_cost
+
+        comission = form.cleaned_data.get('comission')
+        voyage.comission = comission
+
+        comment = form.cleaned_data.get('comment')
+        voyage.comment = comment
+
+        voyage.save()
+
+        return redirect("VoyageCalc:voyage-list")
+
+    context = {
+        'form': form,
+        'title': title,
+        'sub_btn': sub_btn,
+    }
+
+    return render(request, "VoyageCalc/form.html", context)
+
+def edit_voyage(request, id=None):
+    title = 'Update Voyage'
+    voyage = Voyage.objects.get(id=id)
+    form = VoyageCreateForm(request.POST or None, instance=voyage)
+    user = request.user
+    sub_btn = "Update Voyage"
+    
+    if not user.is_authenticated:
+        return redirect('/')
+    
+
+    if form.is_valid():
+        user_logged_in = request.user
+        voyage = form.save(commit=False)
+
+        created_by = user_logged_in
+        voyage.created_by = created_by
+
+        chart = form.cleaned_data.get('chart')
+        voyage.chart = chart
+        
+        vessel = form.cleaned_data.get('price')
+        voyage.price = price
+
+        price = form.cleaned_data.get('vessel')
+        voyage.vessel = vessel
+
+        lumpsum = form.cleaned_data.get('lumpsum')
+        voyage.lumpsum = lumpsum
+
+        date_start = form.cleaned_data.get('date_start')
+        voyage.date_start = date_start
+
+        date_end = form.cleaned_data.get('date_end')
+        voyage.date_end = date_end
+
+        days_at_sea = form.cleaned_data.get('days_at_sea')
+        voyage.days_at_sea = days_at_sea
+
+        days_in_port = form.cleaned_data.get('days_in_port')
+        voyage.days_in_port = days_in_port
+
+        extra_port_cost = form.cleaned_data.get('extra_port_cost')
+        voyage.extra_port_cost = extra_port_cost
+
+        comission = form.cleaned_data.get('comission')
+        voyage.comission = comission
+
+        comment = form.cleaned_data.get('comment')
+        voyage.comment = comment
+
+        voyage.save()
+
+        return redirect("VoyageCalc:voyage-list")
+
+    context = {
+        'form': form,
+        'title': title,
+        'sub_btn': sub_btn,
+    }
+
+    return render(request, "VoyageCalc/form.html", context)
