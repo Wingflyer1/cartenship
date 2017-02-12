@@ -16,7 +16,13 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.conf.urls.static import static
+from .settings import BASE_DIR, STATIC_ROOT
+
+
+
 admin.autodiscover()
+
+print('base_dir: ', BASE_DIR, '\nstatic_root: ', STATIC_ROOT)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),

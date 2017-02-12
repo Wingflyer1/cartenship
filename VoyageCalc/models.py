@@ -42,22 +42,6 @@ class Charterer(models.Model):
     def __unicode__(self):
         return self.name
 
-    # def book_summarys(self):
-    #     story = self.story
-    #     return story[:180]
-
-    # def dice_result(self):
-    #     count = 0
-    #     sum = 0
-    #     try:
-    #         for comment in self.comment_set.all():
-    #             count += 1
-    #             sum += int(comment.dice)
-    #             result = sum/float(count)
-    #         return result
-    #     except:
-    #         return '--'
-
     class Meta:
         ordering = ['name']
 
@@ -90,24 +74,24 @@ class Vessel(models.Model):
         ordering = ['name']
 
 class Chart(models.Model):
-    name = models.CharField(max_length=50, blank=True)
-    charterer = models.ForeignKey(Charterer, on_delete=models.CASCADE)
+    name = models.CharField(max_length=150, blank=True)
+    charterer = models.ForeignKey(Charterer, on_delete=models.CASCADE, related_name="chart_charterer")
     ports = models.ManyToManyField(Port)
     date_start = models.DateTimeField()
     date_end = models.DateTimeField()
     comment = models.TextField(blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="created_by")
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="updated_by", default=False, blank=True)
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="updated_by", default=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True)
     finished = models.BooleanField(default=False)
     deleted = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{} --> ({})".format(self.name, self.charterer)
+        return self.name
 
     def __unicode__(self):
-        return "{} --> ({})".format(self.name, self.charterer)
+        return self.name
 
     class Meta:
         ordering = ['name']
@@ -133,9 +117,9 @@ class Voyage(models.Model):
     commission = models.FloatField(default=0.0)
 
     comment = models.TextField()
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="voy_created_by")
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
-    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="voy_updated_by")
+    updated_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="voy_updated_by", null=True)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
     finished = models.BooleanField()
 
@@ -144,6 +128,9 @@ class Voyage(models.Model):
 
     def __unicode__(self):
         return '{}'.format(self.id)
+
+    class Meta:
+        ordering = ['-id']
 
     def ports(self):
         result = self.chart.ports.all()
@@ -186,15 +173,3 @@ class Voyage(models.Model):
         duration = self.duration()
         return float(self.net_freight()/duration)
 
-
-
-
-        cost = self.port_disp+self.misc_exp
-
-        
-
-        return str(result-commission)
-
-
-    class Meta:
-        ordering = ['-id']

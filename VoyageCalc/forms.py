@@ -74,7 +74,7 @@ class ChartCreateForm(forms.ModelForm):
     date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     comment = forms.CharField(widget=forms.Textarea, required=False)
-    finished = forms.BooleanField(required=False)
+    
 
 
     class Meta:
@@ -86,8 +86,7 @@ class ChartCreateForm(forms.ModelForm):
             'date_start',
             'date_end',
             'comment',
-            'finished',
-        ]
+            ]
 
 class VoyageCreateForm(forms.ModelForm):
 
@@ -95,7 +94,7 @@ class VoyageCreateForm(forms.ModelForm):
     vessel = forms.ModelChoiceField(queryset=Vessel.objects.all(), empty_label=None)
 
     lumpsum = forms.FloatField()
-    other_inc = forms.FloatField()
+    other_inc = forms.FloatField(label="Other income")
 
     date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
