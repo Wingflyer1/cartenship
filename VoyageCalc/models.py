@@ -111,8 +111,8 @@ class Voyage(models.Model):
     chart = models.ForeignKey(Chart, on_delete=models.CASCADE)
     vessel = models.ForeignKey(Vessel, on_delete=models.CASCADE)
     # income
-    lumpsum = models.FloatField()
-    other_inc = models.FloatField()
+    # lumpsum = models.FloatField()
+    # other_inc = models.FloatField()
     # duration
     date_start = models.DateField()
     date_end = models.DateField()
@@ -122,8 +122,8 @@ class Voyage(models.Model):
     days_in_port_mgo = models.FloatField(blank=True, default=0)
     days_in_port_ifo = models.FloatField(blank=True, default=0)
     # expenses
-    port_disp = models.FloatField()
-    misc_exp = models.FloatField()
+    # port_disp = models.FloatField()
+    # misc_exp = models.FloatField()
     commission = models.FloatField()
 
     comment = models.TextField()
@@ -133,18 +133,64 @@ class Voyage(models.Model):
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, null=True)
     finished = models.BooleanField()
 
+    class Meta:
+        ordering = ['-chart']    
+
     def __str__(self):
         return '{}'.format(self.id)
 
     def __unicode__(self):
         return '{}'.format(self.id)
 
+    def voyage_incomes(self):
+        incomes = voyage_income_set.filter(voyage=self)
+        return incomes
+
+    def total_freight_q(self):
+        query = self.voyage_incomes()
+        result = query[0]
+        return result
+
+    def freight_lumpsum(self):
+        query = self.voyage_incomes()
+        result = query[1]
+        return result
+
+    def oth_freight_inc(self):
+        query = self.voyage_incomes()
+        result = query[2]
+        return result
+
+    def demurrage_despatch(self):
+        query = self.voyage_incomes()
+        result = query[3]
+        return result
+
+    # costs
+    def voyage_costs(self):
+        costs = voyage_cost_set.filter(voyage=self)
+        return costs
+
+    def port_disp(self):
+        query = self.voyage_cost()
+        result = query[0]
+        return result
+
+    def bunkers(self):
+        query = self.voyage_costs()
+        result = query[1]
+        return result
+
+    def misc_exp(self):
+        query = self.voyage_cost()
+        result = query[2]
+        return result
+
     def voyage_number(self):
         result = str(self.id).zfill(4)
         return result
 
-    class Meta:
-        ordering = ['-chart']
+
 
     def ports(self):
         result = self.chart.ports.all()
@@ -168,7 +214,7 @@ class Voyage(models.Model):
             return False
 
     def gross_freight(self):
-        return self.lumpsum + self.other_inc
+        return self.freight_lumpsum() + self.other_inc() + self.oth_freight_inc() + self.total_freight_q
 
     def commission_(self):
         print('here now')
@@ -177,20 +223,11 @@ class Voyage(models.Model):
         try:
             result = (com/100)*gross_freight
         except:
-            print('failure')
             result = 0
         return result
 
-    def bunkers(self):
-        sea_lad = self.vessel.cons_lad*self.days_at_sea_laden
-        sea_bal = self.vessel.cons_bal*self.days_at_sea_ballast
-        port_mgo = self.vessel.cons_por_mgo*self.days_in_port_mgo
-        port_ifo = self.vessel.cons_por_ifo*self.days_in_port_ifo
-        result = sea_lad + sea_bal + port_mgo + port_ifo
-        return result
-
     def total_exp(self):
-        result = self.bunkers()+self.commission+self.port_disp+self.misc_exp
+        result = self.bunkers()+self.commission_()+self.port_disp()+self.misc_exp()
         return result
 
     def net_freight(self):
@@ -214,3 +251,30 @@ class Voyage(models.Model):
         print(result)
         return result
 
+class VoyageCost(models.Model):
+    voyage = models.ForeignKey(Voyage)
+    amount = models.FloatField(default=0)
+    cost_type = models.CharField(max_length=2, default='LS')
+
+    class meta:
+        ordering = ['-id']
+
+    def __str__(self):
+        return "{}: {}".format(self.cost_type, self.amount)
+
+    def __unicode__(self):
+        return "{}: {}".format(self.cost_type, self.amount)
+
+class VoyageIncome(models.Model):
+    voyage = models.ForeignKey(Voyage)
+    amount = models.FloatField(default=0, blank=True)
+    income_type = models.CharField(max_length=2, default='PD')
+
+    class meta:
+        ordering = ['-id']
+
+    def __str__(self):
+        return "{}: {}".format(self.income_type, self.amount)
+
+    def __unicode__(self):
+        return "{}: {}".format(self.income_type, self.amount)
