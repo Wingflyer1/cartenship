@@ -8,7 +8,7 @@ class ChartererCreateForm(forms.ModelForm):
     name = forms.CharField(max_length=250, label='Name', initial='Company Name')
     address = forms.CharField(max_length=250, label='Address', required=False)
     country = forms.CharField(max_length=250, label='Country', required=False)
-    switch_board = forms.CharField(max_length=250, label='Phone', required=False)
+    switch_board = forms.CharField(max_length=50, label='Phone', required=False)
     contact_person = forms.CharField(max_length=250, label='Contact Person', required=False)
     comment = forms.CharField(widget=forms.Textarea, required=False)
 
@@ -17,6 +17,7 @@ class ChartererCreateForm(forms.ModelForm):
         fields = [
             'name',
             'address',
+            'contact_person',
             'country',
             'switch_board',
             'contact_person',
@@ -45,8 +46,8 @@ class VesselCreateForm(forms.ModelForm):
 
     name = forms.CharField(max_length=250, label='Vessel name')
     telephone = forms.CharField(max_length=250, required=False)
-    bunker_price_mgo = forms.FloatField(initial=0)
-    bunker_price_ifo = forms.FloatField(initial=0)
+    bunker_price_mgo = forms.FloatField(initial=0, label='Price MGO (bunker)')
+    bunker_price_ifo = forms.FloatField(initial=0, label='Price IFO (bunker)')
 
     cons_lad = forms.FloatField(label='Consumption Laden')
     cons_bal = forms.FloatField(label='Consumption Ballast')
@@ -59,6 +60,8 @@ class VesselCreateForm(forms.ModelForm):
         fields = [
             'name',
             'telephone',
+            'bunker_price_mgo',
+            'bunker_price_ifo',
             'cons_lad',
             'cons_bal',
             'cons_por_mgo',

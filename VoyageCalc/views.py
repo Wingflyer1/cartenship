@@ -41,6 +41,10 @@ def create_charterer(request):
 
         # insert form data to object
         name = form.cleaned_data.get('name')
+        split_name = name.split(" ")
+        name = ""
+        for i in split_name:
+            name += (i.capitalize()) + " "
         charterer.name = name
         
         address = form.cleaned_data.get('address')
@@ -87,6 +91,10 @@ def edit_charterer(request, id=None):
 
         # insert form data to object
         name = form.cleaned_data.get('name')
+        split_name = name.split(" ")
+        name = ""
+        for i in split_name:
+            name += (i.capitalize()) + " "
         charterer.name = name
         
         address = form.cleaned_data.get('address')
@@ -134,12 +142,20 @@ def create_port(request):
 
         # insert form data to object
         name = form.cleaned_data.get('name')
-        port.name = name
+        split_name = name.split(" ")
+        name = ""
+        for i in split_name:
+            name += (i.capitalize()) + " "
+        charterer.name = name
         
         price = form.cleaned_data.get('price')
         port.price = price
 
         contact_person = form.cleaned_data.get('contact_person')
+        split_name = contact_person.split(" ")
+        contact_person = ""
+        for i in contact_person:
+            contact_person += (i.capitalize()) + " "
         port.contact_person = contact_person
 
         telephone = form.cleaned_data.get('telephone')
@@ -180,12 +196,20 @@ def edit_port(request, id=None):
 
         # insert form data to object
         name = form.cleaned_data.get('name')
-        port.name = name
+        split_name = name.split(" ")
+        name = ""
+        for i in split_name:
+            name += (i.capitalize()) + " "
+        charterer.name = name
         
         price = form.cleaned_data.get('price')
         port.price = price
 
         contact_person = form.cleaned_data.get('contact_person')
+        split_name = contact_person.split(" ")
+        contact_person = ""
+        for i in contact_person:
+            contact_person += (i.capitalize()) + " "
         port.contact_person = contact_person
 
         telephone = form.cleaned_data.get('telephone')
@@ -227,7 +251,11 @@ def create_vessel(request):
 
         # insert form data to object
         name = form.cleaned_data.get('name')
-        vessel.name = name
+        split_name = name.split(" ")
+        name = ""
+        for i in split_name:
+            name += (i.capitalize()) + " "
+        charterer.name = name
 
         telephone = form.cleaned_data.get('telephone')
         vessel.telephone = telephone
@@ -280,7 +308,11 @@ def edit_vessel(request, id=None):
 
         # insert form data to object
         name = form.cleaned_data.get('name')
-        vessel.name = name
+        split_name = name.split(" ")
+        name = ""
+        for i in split_name:
+            name += (i.capitalize()) + " "
+        charterer.name = name
 
         telephone = form.cleaned_data.get('telephone')
         vessel.telephone = telephone
@@ -331,7 +363,11 @@ def create_chart(request):
         chart.created_by = created_by
 
         name = form.cleaned_data.get('name')
-        chart.name = name
+        split_name = name.split(" ")
+        name = ""
+        for i in split_name:
+            name += (i.capitalize()) + " "
+        charterer.name = name
 
         charterer = form.cleaned_data.get('charterer')
         chart.charterer = charterer
@@ -396,7 +432,11 @@ def edit_chart(request, id=None):
         chart.comment = comment
 
         name = form.cleaned_data.get('name')
-        chart.name = name
+        split_name = name.split(" ")
+        name = ""
+        for i in split_name:
+            name += (i.capitalize()) + " "
+        charterer.name = name
 
         chart.save()
 
@@ -544,6 +584,9 @@ def edit_voyage(request, id=None):
         
         comment = form.cleaned_data.get('comment')
         voyage.comment = comment
+
+        finished = form.cleaned_data.get('finished')
+        voyage.finished = finished
 
         voyage.save()
 

@@ -21,6 +21,7 @@ class Port(models.Model):
         return self.name
 
     class Meta:
+
         ordering = ['name']
 
 class Charterer(models.Model):
@@ -28,7 +29,7 @@ class Charterer(models.Model):
     name = models.CharField(max_length=250)
     address = models.CharField(max_length=500, blank=True)
     country = models.CharField(max_length=20, blank=True)
-    switch_board = models.CharField(max_length=30, blank=True)
+    switch_board = models.CharField(max_length=50, blank=True)
     contact_person = models.CharField(max_length=100, blank=True)
     comment = models.TextField(blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -49,14 +50,14 @@ class Charterer(models.Model):
 class Vessel(models.Model):
 
     name = models.CharField(max_length=250)
-    telephone = models.CharField(max_length=250, blank=True)
-    bunker_price_mgo = models.FloatField(default=0, blank=True)
-    bunker_price_ifo = models.FloatField(default=0, blank=True)
+    telephone = models.CharField(max_length=250)
+    bunker_price_mgo = models.FloatField(default=0)
+    bunker_price_ifo = models.FloatField(default=0)
 
-    cons_lad = models.FloatField(default=0, blank=True)
-    cons_bal = models.FloatField(default=0, blank=True)
-    cons_por_mgo = models.FloatField(default=0, blank=True)
-    cons_por_ifo = models.FloatField(default=0, blank=True)
+    cons_lad = models.FloatField(default=0)
+    cons_bal = models.FloatField(default=0)
+    cons_por_mgo = models.FloatField(default=0)
+    cons_por_ifo = models.FloatField(default=0)
 
     comment = models.TextField(blank=True)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -96,6 +97,15 @@ class Chart(models.Model):
     class Meta:
         ordering = ['name']
 
+    def chart_number(self):
+        result = str(self.id).zfill(4)
+        return result
+
+    def number_of_voyages(self):
+        voyages = self.voyage_set.all()
+        result = len(voyages)
+        return result        
+
 class Voyage(models.Model):
     # relations
     chart = models.ForeignKey(Chart, on_delete=models.CASCADE)
@@ -114,7 +124,7 @@ class Voyage(models.Model):
     # expenses
     port_disp = models.FloatField()
     misc_exp = models.FloatField()
-    commission = models.FloatField(default=0.0)
+    commission = models.FloatField()
 
     comment = models.TextField()
     created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="voy_created_by")
@@ -129,8 +139,12 @@ class Voyage(models.Model):
     def __unicode__(self):
         return '{}'.format(self.id)
 
+    def voyage_number(self):
+        result = str(self.id).zfill(4)
+        return result
+
     class Meta:
-        ordering = ['-id']
+        ordering = ['-chart']
 
     def ports(self):
         result = self.chart.ports.all()
@@ -141,17 +155,29 @@ class Voyage(models.Model):
         d1 = self.date_end
         delta = d1-d0
         tdelta = delta.days
-
         return float(tdelta)
+
+    def over_chart(self):
+        avg = int(self.avg_tc())
+        own_tc = int(self.tc_eq())
+        if own_tc>=avg*1.25:
+            print('jopp')
+            return True
+        else:
+            print('neipp')
+            return False
 
     def gross_freight(self):
         return self.lumpsum + self.other_inc
 
-    def commission(self):
+    def commission_(self):
+        print('here now')
         gross_freight = self.gross_freight()
+        com = self.commission
         try:
-            result = (self.commission/100)*gross_freight
+            result = (com/100)*gross_freight
         except:
+            print('failure')
             result = 0
         return result
 
@@ -164,7 +190,8 @@ class Voyage(models.Model):
         return result
 
     def total_exp(self):
-        return float(self.bunkers()+self.commission()+self.port_disp+self.misc_exp)
+        result = self.bunkers()+self.commission+self.port_disp+self.misc_exp
+        return result
 
     def net_freight(self):
         return float(self.gross_freight()-self.total_exp())
@@ -172,4 +199,18 @@ class Voyage(models.Model):
     def tc_eq(self):
         duration = self.duration()
         return float(self.net_freight()/duration)
+
+    def avg_tc(self):
+        object_list = Voyage.objects.filter(chart=self.chart)
+        tc_sum = 0
+        num = 0
+        for object_ in object_list:
+            tc = int(object_.tc_eq())
+            print(tc)
+            num += 1
+            tc_sum += tc
+        result = tc_sum/num
+        print(tc_sum, num, 'blir dette riktig da?')
+        print(result)
+        return result
 
