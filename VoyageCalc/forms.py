@@ -1,5 +1,5 @@
 from django import forms
-from .models import Charterer, Port, Vessel, Chart, Voyage, VoyageCost, VoyageIncome
+from .models import Charterer, Port, Vessel, Chart, Voyage
 
 
 
@@ -71,56 +71,70 @@ class VesselCreateForm(forms.ModelForm):
 
 class ChartCreateForm(forms.ModelForm):
 
+    name = forms.CharField(max_length=150, required=True)
     charterer = forms.ModelChoiceField(queryset=Charterer.objects.all(), empty_label=None)
+    ports = forms.ModelMultipleChoiceField(widget=forms.CheckboxSelectMultiple(), queryset=Port.objects.filter(deleted=False))
     date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     comment = forms.CharField(widget=forms.Textarea, required=False)
+    
+
 
     class Meta:
         model = Chart
-        fields = ['name',
-                  'charterer',
-                  'ports',
-                  'date_start',
-                  'date_end',
-                  'comment',
-                  ]
+        fields = [
+            'name',
+            'charterer',
+            'ports',
+            'date_start',
+            'date_end',
+            'comment',
+            ]
 
 class VoyageCreateForm(forms.ModelForm):
 
-    # chart = forms.ModelChoiceField(queryset=Chart.objects.all(), empty_label=None)
-    # vessel = forms.ModelChoiceField(queryset=Vessel.objects.all(), empty_label=None)
+    chart = forms.ModelChoiceField(queryset=Chart.objects.all(), empty_label=None)
+    vessel = forms.ModelChoiceField(queryset=Vessel.objects.all(), empty_label=None)
 
-    # # lumpsum = forms.FloatField()
-    # # other_inc = forms.FloatField(label="Other income")
+    lumpsum = forms.FloatField()
+    other_inc = forms.FloatField(label="Other income")
 
-    # date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
-    # date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
+    date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
+    date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
     
-    # days_at_sea_laden = forms.FloatField()
-    # days_at_sea_ballast = forms.FloatField()
-    # days_in_port_mgo = forms.FloatField()
-    # days_in_port_ifo = forms.FloatField()
+    days_at_sea_laden = forms.FloatField()
+    days_at_sea_ballast = forms.FloatField()
+    days_in_port_mgo = forms.FloatField()
+    days_in_port_ifo = forms.FloatField()
 
-    # # port_disp = forms.FloatField(label="Port dispursement")
-    # # misc_exp = forms.FloatField(label="Misc expenses")
-    # commission = forms.FloatField(help_text="ie. 2.5")
+    port_disp = forms.FloatField(label="Port dispursement")
+    misc_exp = forms.FloatField(label="Misc expenses")
+    commission = forms.FloatField(help_text="ie. 2.5")
 
-    # comment = forms.CharField(widget=forms.Textarea, required=False)
-    # finished = forms.BooleanField(required=False)
+    comment = forms.CharField(widget=forms.Textarea, required=False)
+    finished = forms.BooleanField(required=False)
 
     class Meta:   
         model = Voyage
         fields = [
+                'chart',
+                'vessel',
+
+                'lumpsum',
+                'other_inc',
+
+                'date_start',
+                'date_end',
+
+                'days_at_sea_laden',
+                'days_at_sea_ballast',
+                'days_in_port_mgo',
+                'days_in_port_ifo',
+
+                'port_disp',
+                'misc_exp',
+                'commission',
+
+                'comment',
+                'finished',
     ]
-
-class VoyageCostForm(forms.ModelForm):
-    class Meta:
-        model = VoyageCost
-        exclude = ('voyage',)
-
-
-class VoyageIncomeForm(forms.ModelForm):
-    class Meta:
-        model = VoyageIncome
-        exclude = ('voyage')
