@@ -21,14 +21,13 @@
                             <th>Vessel</th>
                             <th>Charterer</th>
                             <th>Gross Freight</th>
-                            <th>Comm</th>
-                            <th>Port Dispurs</th>
+                            <th>Commission</th>
                             <th>Bunkers</th>
-                            <th>Misc. expens</th>
                             <th>Net Freight</th>
-                            <th>TC Eq</th>
-                            <th>Avg Chart TC</th>
-                            <th>Reg by</th>                            
+                            <th>Tot. Days</th>
+                            <th>Voy TC Eq</th>
+                            <th>Chart TC</th>
+                            <th>Reg by</th>                
                         </tr>
                     </thead>
 
@@ -38,15 +37,14 @@
                                 <td><a href="{% url 'VoyageCalc:edit-voyage' object.id %}">{{ object.voyage_number }}</a></td>
                                 <td>{{ object.vessel }}</td>
                                 <td>{{ object.chart.charterer|truncatechars:7 }}</td>
-                                <td>{{ object.gross_freight }}</td>
-                                <td>{{ object.commission_ }}</td>
-                                <td>{{ object.port_disp }}</td>
+                                <td>{{ object.voyage_incomes }}</td>
+                                <td>{{ object.commission }}</td>
                                 <td>{{ object.bunkers }}</td>
-                                <td>{{ object.misc_exp }}</td>
                                 <td>{{ object.net_freight }}</td>
-                                {% if object.over_chart %}<td style="color:green;">{% else %}<td>{% endif %}{{ object.tc_eq|truncatechars:9 }}</td>
-                                <td>{{ object.avg_tc|slice:"5:" }}</td>
-                                <td>{{ object.created_by }}</td>
+                                <td>{{ object.total_days }}</td>
+                                {% if object.over_chart %}<td style="color:green;">{% else %}<td>{% endif %}{{ object.tc_equiv }}</td>
+                                <td>{{ object.chart_avg_tc}} </td>
+                                <td></td>
                             </tr>
                           
                         {% endfor %}

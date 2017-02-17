@@ -29,10 +29,10 @@
                         {% for object in object_list %}
                         
                             <tr>
-                                <td><a href="{% url 'VoyageCalc:edit-charterer' object.id %}">{{ object.name }}</a></td>
+                                <td><a href="{% url 'VoyageCalc:edit-charterer' object.id %}">{{ object.company_name }}</a></td>
                                 <th>{{ object.contact_person }}</th>
                                 <td>{{ object.switch_board }}</td>
-                                <td>{{ object.comment }}</td>
+                                <td>{{ object.comment|truncatechars:28 }}</td>
                             </tr>
                           
                         {% endfor %}

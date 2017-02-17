@@ -18,9 +18,9 @@
                     <thead>
                         <tr>
                             <th>Port</th>
-                            <th>Price</th>
                             <th>Contact Person</th>
                             <th>Telephone</th>
+                            <th>Current charts</th>
                             <th>Comment</th>
 
                         </tr>
@@ -30,10 +30,10 @@
                         {% for object in object_list %}
                         
                             <tr>
-                                <td><a href="{% url 'VoyageCalc:edit-port' object.id %}">{{ object.name }}</a></td>
-                                <td>{{ object.price }}</td>
+                                <td><a href="{% url 'VoyageCalc:edit-port' object.id %}">{{ object.port_name }}</a></td>
                                 <th>{{ object.contact_person }}</th>
                                 <td>{{ object.telephone }}</td>
+                                <td> - under construction - </td>
                                 <td>{{ object.comment|truncatechars:50 }}</td>
                             </tr>
                           

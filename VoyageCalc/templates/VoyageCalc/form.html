@@ -4,6 +4,10 @@
 
 {% block title %} C-Calc -> {{ title }}
 {% endblock title %}
+{% block head %}
+
+{% endblock head %}
+
 
 
 {% block body %}
@@ -14,19 +18,18 @@
         </div>
         <div class="panel-body">
             
-                        <form method="POST" action="" enctype="multipart/form-data">
+                        <form class="vertical" role="form" method="POST" action="{% if came_from_page %}?next={{ came_from_page }}{% endif %}" enctype="multipart/form-data">
+                        
                             {% csrf_token %}
                             {{form|crispy}}
+                            
                             <input type = submit class="btn btn-success" style="width:100%;" value="{{ sub_btn }}" />
+                            
                         </form>
-                        {% if message %}<br/><br/>
-                            <a href="{% url 'accounts:registration_register' %}"><button class="btn btn-primary">Registrer deg!</button></a>
-                        {% endif %}      
 
         </div>          
       </div>
 </div>
-
 
 {% block footer %}
 {% endblock footer %}

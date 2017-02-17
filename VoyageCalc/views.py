@@ -1,25 +1,29 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Charterer, Port, Vessel, Chart, Voyage
-from .forms import ChartererCreateForm, PortCreateForm, VesselCreateForm, ChartCreateForm, VoyageCreateForm 
-
+from .models import Charterer, Port, Vessel, Chart, Voyage, Income, Cost
+from .forms import ChartererCreateForm, PortCreateForm, VesselCreateForm, ChartCreateForm, VoyageCreateForm, IncomeForm, CostForm
+import random
 from django.contrib.auth.models import User
+from carten import settings
+from django.utils.http import is_safe_url
 
 app_name='VoyageCalc'
 
 
 def home(request):
-	title = "C-Calc"
-	voyages = [['0255','Glencore', '5.5', '2', '87.0', '38500', 75000], 
-	           ['0256', 'Glencore', 'Carten Elina', '4.8', '1.3', '56', 65000],
-	           ['0257', 'South Pacific Trade Company', '2.1', '0', '22', '25000',-18000]]
-	user = request.user
-	if not user.is_authenticated:
-		return redirect('auth_login')		
-	context = {
-		'title': title,
-		'voyages': voyages,
-	}
-	return render(request, 'VoyageCalc/home.html', context)
+    title = "C-Calc"
+    version = settings.VERSION
+
+    pic_num = random.randrange(1, 4)
+
+    user = request.user
+    if not user.is_authenticated:
+       return redirect('auth_login')
+    context = {
+        'title': title,
+        'pic_num': pic_num,
+        'version': version, 
+    }
+    return render(request, 'VoyageCalc/home.html', context)
 
 # Charterer views
 def create_charterer(request):
@@ -40,12 +44,12 @@ def create_charterer(request):
         charterer.created_by = created_by
 
         # insert form data to object
-        name = form.cleaned_data.get('name')
-        split_name = name.split(" ")
-        name = ""
+        company_name = form.cleaned_data.get('company_name')
+        split_name = company_name.split(" ")
+        company_name = ""
         for i in split_name:
-            name += (i.capitalize()) + " "
-        charterer.name = name
+            company_name += (i.capitalize()) + " "
+        charterer.company_name = company_name
         
         address = form.cleaned_data.get('address')
         charterer.address = address
@@ -90,12 +94,12 @@ def edit_charterer(request, id=None):
         charterer.created_by = created_by
 
         # insert form data to object
-        name = form.cleaned_data.get('name')
-        split_name = name.split(" ")
-        name = ""
+        company_name = form.cleaned_data.get('company_name')
+        split_name = company_name.split(" ")
+        company_name = ""
         for i in split_name:
-            name += (i.capitalize()) + " "
-        charterer.name = name
+            company_name += (i.capitalize()) + " "
+        charterer.company_name = company_name
         
         address = form.cleaned_data.get('address')
         charterer.address = address
@@ -141,22 +145,26 @@ def create_port(request):
         port.created_by = created_by
 
         # insert form data to object
-        name = form.cleaned_data.get('name')
-        split_name = name.split(" ")
-        name = ""
+        port_name = form.cleaned_data.get('port_name')
+        split_name = port_name.split(" ")
+        port_name = ""
         for i in split_name:
-            name += (i.capitalize()) + " "
-        charterer.name = name
+            port_name += (i.capitalize()) + " "
+        port.port_name = port_name
         
         price = form.cleaned_data.get('price')
         port.price = price
 
-        contact_person = form.cleaned_data.get('contact_person')
-        split_name = contact_person.split(" ")
-        contact_person = ""
-        for i in contact_person:
-            contact_person += (i.capitalize()) + " "
-        port.contact_person = contact_person
+        try:
+            contact_person = form.cleaned_data.get('contact_person')
+            split_name = contact_person.split(" ")
+            contact_person = ""
+            for i in contact_person:
+                contact_person += (i.capitalize()) + " "
+            port.contact_person = contact_person
+        except AttributeError:
+            pass
+
 
         telephone = form.cleaned_data.get('telephone')
         port.telephone = telephone
@@ -195,22 +203,25 @@ def edit_port(request, id=None):
         port.created_by = created_by
 
         # insert form data to object
-        name = form.cleaned_data.get('name')
-        split_name = name.split(" ")
-        name = ""
+        port_name = form.cleaned_data.get('port_name')
+        split_name = port_name.split(" ")
+        port_name = ""
         for i in split_name:
-            name += (i.capitalize()) + " "
-        charterer.name = name
+            port_name += (i.capitalize()) + " "
+        port.port_name = port_name
         
         price = form.cleaned_data.get('price')
         port.price = price
 
-        contact_person = form.cleaned_data.get('contact_person')
-        split_name = contact_person.split(" ")
-        contact_person = ""
-        for i in contact_person:
-            contact_person += (i.capitalize()) + " "
-        port.contact_person = contact_person
+        try:
+            contact_person = form.cleaned_data.get('contact_person')
+            split_name = contact_person.split(" ")
+            contact_person = ""
+            for i in contact_person:
+                contact_person += (i.capitalize()) + " "
+            port.contact_person = contact_person
+        except AttributeError:
+            pass
 
         telephone = form.cleaned_data.get('telephone')
         port.telephone = telephone
@@ -250,12 +261,12 @@ def create_vessel(request):
         vessel.created_by = created_by
 
         # insert form data to object
-        name = form.cleaned_data.get('name')
-        split_name = name.split(" ")
-        name = ""
+        vessel_name = form.cleaned_data.get('vessel_name')
+        split_name = vessel_name.split(" ")
+        vessel_name = ""
         for i in split_name:
-            name += (i.capitalize()) + " "
-        charterer.name = name
+            vessel_name += (i.capitalize()) + " "
+        vessel.vessel_name = vessel_name
 
         telephone = form.cleaned_data.get('telephone')
         vessel.telephone = telephone
@@ -307,12 +318,12 @@ def edit_vessel(request, id=None):
         vessel.created_by = created_by
 
         # insert form data to object
-        name = form.cleaned_data.get('name')
-        split_name = name.split(" ")
-        name = ""
+        vessel_name = form.cleaned_data.get('vessel_name')
+        split_name = vessel_name.split(" ")
+        vessel_name = ""
         for i in split_name:
-            name += (i.capitalize()) + " "
-        charterer.name = name
+            vessel_name += (i.capitalize()) + " "
+        vessel.vessel_name = vessel_name
 
         telephone = form.cleaned_data.get('telephone')
         vessel.telephone = telephone
@@ -362,12 +373,8 @@ def create_chart(request):
         created_by = user_logged_in
         chart.created_by = created_by
 
-        name = form.cleaned_data.get('name')
-        split_name = name.split(" ")
-        name = ""
-        for i in split_name:
-            name += (i.capitalize()) + " "
-        charterer.name = name
+        chart_name = form.cleaned_data.get('chart_name')
+        chart.chart_name = chart_name
 
         charterer = form.cleaned_data.get('charterer')
         chart.charterer = charterer
@@ -419,6 +426,9 @@ def edit_chart(request, id=None):
         charterer = form.cleaned_data.get('charterer')
         chart.charterer = charterer
 
+        chart_name = form.cleaned_data.get('chart_name')
+        chart.chart_name = chart_name
+
         ports = form.cleaned_data.get('ports')
         chart.ports = ports
         
@@ -430,13 +440,6 @@ def edit_chart(request, id=None):
 
         comment = form.cleaned_data.get('comment')
         chart.comment = comment
-
-        name = form.cleaned_data.get('name')
-        split_name = name.split(" ")
-        name = ""
-        for i in split_name:
-            name += (i.capitalize()) + " "
-        charterer.name = name
 
         chart.save()
 
@@ -453,9 +456,10 @@ def edit_chart(request, id=None):
 # voyage views
 def create_voyage(request):
     title = 'New Voyage'
+    sub_btn = "Add Voyage"
+    # form preparations
     form = VoyageCreateForm(request.POST or None)
     user = request.user
-    sub_btn = "Add Voyage"
     
     if not user.is_authenticated:
         return redirect('/')
@@ -471,12 +475,6 @@ def create_voyage(request):
         vessel = form.cleaned_data.get('vessel')
         voyage.vessel = vessel
         
-        lumpsum = form.cleaned_data.get('lumpsum')
-        voyage.lumpsum = lumpsum
-
-        other_inc = form.cleaned_data.get('other_inc')
-        voyage.other_inc = other_inc
-
         date_start = form.cleaned_data.get('date_start')
         voyage.date_start = date_start
 
@@ -501,8 +499,8 @@ def create_voyage(request):
         misc_exp = form.cleaned_data.get('misc_exp')
         voyage.misc_exp = misc_exp
 
-        commission = form.cleaned_data.get('commission')
-        voyage.commission = commission
+        commission_p = form.cleaned_data.get('commission_p')
+        voyage.commission_p = commission_p
         
         comment = form.cleaned_data.get('comment')
         voyage.comment = comment
@@ -512,7 +510,7 @@ def create_voyage(request):
 
         voyage.save()
 
-        return redirect("VoyageCalc:voyage-list")
+        return redirect("VoyageCalc:edit-voyage", voyage)
 
     context = {
         'form': form,
@@ -525,13 +523,17 @@ def create_voyage(request):
 def edit_voyage(request, id=None):
     title = 'Edit Voyage'
     voyage = Voyage.objects.get(id=id)
+    income_form = IncomeForm(request.POST or None)
     form = VoyageCreateForm(request.POST or None, instance=voyage)
+    incomes = Income.objects.filter(voyage = voyage)
+    costs = Cost.objects.filter(voyage = voyage)
+    chart = Chart.objects.get(id = id)
+
     user = request.user
     sub_btn = "Save changes"
     
     if not user.is_authenticated:
         return redirect('/')
-    
 
     if form.is_valid():
         user_logged_in = request.user
@@ -546,12 +548,6 @@ def edit_voyage(request, id=None):
         vessel = form.cleaned_data.get('vessel')
         voyage.vessel = vessel
         
-        lumpsum = form.cleaned_data.get('lumpsum')
-        voyage.lumpsum = lumpsum
-
-        other_inc = form.cleaned_data.get('other_inc')
-        voyage.other_inc = other_inc
-
         date_start = form.cleaned_data.get('date_start')
         voyage.date_start = date_start
 
@@ -570,14 +566,8 @@ def edit_voyage(request, id=None):
         days_in_port_ifo = form.cleaned_data.get('days_in_port_ifo')
         voyage.days_in_port_ifo = days_in_port_ifo
 
-        port_disp = form.cleaned_data.get('port_disp')
-        voyage.port_disp = port_disp
-
-        misc_exp = form.cleaned_data.get('misc_exp')
-        voyage.misc_exp = misc_exp
-
-        commission = form.cleaned_data.get('commission')
-        voyage.commission = commission
+        commission_p = form.cleaned_data.get('commission_p')
+        voyage.commission_p = commission_p
 
         updated_by = user_logged_in
         voyage.updated_by = updated_by
@@ -596,6 +586,104 @@ def edit_voyage(request, id=None):
         'form': form,
         'title': title,
         'sub_btn': sub_btn,
+        'incomes': incomes,
+        'voyage': voyage,
+        'costs': costs,
+        'chart': chart,
+    }
+
+    return render(request, "VoyageCalc/voyage_form.html", context)
+
+def add_income(request, id=None):
+    title = 'New Income'
+    sub_btn = "Add Income"
+    form = IncomeForm(request.POST or None)
+    user = request.user
+    voyage = Voyage.objects.get(id=id)
+    
+    # get url of voyage-page
+    came_from_page = request.GET.get('from', None)
+    print(came_from_page)
+    
+    if not user.is_authenticated:
+        return redirect('/')
+    
+    if form.is_valid():
+        user_logged_in = request.user
+        income = form.save(commit=False)
+
+        # automatic set created_by
+        created_by = user_logged_in
+        income.created_by = created_by
+      
+        income_type = form.cleaned_data.get('income_type')
+        income.income_type = income_type
+
+        income.voyage = voyage
+
+        income_amount = form.cleaned_data.get('income_amount')
+        income.income_amount = income_amount
+
+        income.save()
+
+        next = request.GET.get('next', None)
+        if next:
+            return redirect(next)
+
+    context = {
+        'form': form,
+        'title': title,
+        'sub_btn': sub_btn,
+        'came_from_page': came_from_page
     }
 
     return render(request, "VoyageCalc/form.html", context)
+
+def add_cost(request, id=None):
+    title = 'New Cost'
+    sub_btn = "Add Cost"
+    form = CostForm(request.POST or None)
+    user = request.user
+    voyage = Voyage.objects.get(id=id)
+    
+    # get url of voyage-page
+    came_from_page = request.GET.get('from', None)
+    print(came_from_page)
+    
+    if not user.is_authenticated:
+        return redirect('/')
+    
+    if form.is_valid():
+        user_logged_in = request.user
+        cost = form.save(commit=False)
+
+        # automatic set created_by
+        created_by = user_logged_in
+        cost.created_by = created_by
+      
+        cost_type = form.cleaned_data.get('cost_type')
+        cost.income_type = cost_type
+
+        cost.voyage = voyage
+
+        cost_amount = form.cleaned_data.get('cost_amount')
+        cost.income_amount = cost_amount
+
+        cost.save()
+
+        next = request.GET.get('next', None)
+        if next:
+            return redirect(next)
+
+    context = {
+        'form': form,
+        'title': title,
+        'sub_btn': sub_btn,
+        'came_from_page': came_from_page
+    }
+
+    return render(request, "VoyageCalc/form.html", context)
+
+# edit_cost
+
+# edit_income

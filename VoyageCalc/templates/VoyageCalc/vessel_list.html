@@ -19,10 +19,9 @@
                         <tr>
                             <th>Vessel</th>
                             <th>Telephone</th>
-                            <th>Daily Cons Laden</th>
-                            <th>Daily Cons Ballast</th>
-                            <th>Cons Port MGO</th>
-                            <th>Cons Port IFO</th>
+                            <th>Usage laden</th>
+                            <th>Usage ballast</th>
+                            <th>Usage Port MGO</th>
                             <th>Comment</th>
 
                         </tr>
@@ -32,12 +31,11 @@
                         {% for object in object_list %}
                         
                             <tr>
-                                <td><a href="{% url 'VoyageCalc:edit-vessel' object.id %}">{{ object.name }}</a></td>
+                                <td><a href="{% url 'VoyageCalc:edit-vessel' object.id %}">{{ object.vessel_name }}</a></td>
                                 <th>{{ object.telephone }}</th>
-                                <td>{{ object.cons_lad }}</td>
-                                <td>{{ object.cons_bal }}</td>
-                                <td>{{ object.cons_por_mgo }}</td>
-                                <td>{{ object.cons_por_ifo }}</td>
+                                <th>{{ object.cons_lad }}</th>
+                                <th>{{ object.cons_bal }}</th>
+                                <th>{{ object.cons_por_mgo }}</th>
                                 <td>{{ object.comment|truncatechars:50 }}</td>
                             </tr>
                           
