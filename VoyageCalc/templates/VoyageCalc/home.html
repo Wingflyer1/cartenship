@@ -6,29 +6,36 @@
 {% endblock title %}
 
 
-{% block style %}
-
-{% endblock %}
-
 
 {% block body %}
 <div class="container-fluid">
     <div class="row">
 
-        <div class="col-sm-6 col-sm-offset-3 col-xs-10" style="background-color:#495b5f; color:black;">
+        <div class="col-sm-6 col-sm-offset-3 col-xs-10" style="color:white; text-align:center;">
 
-                <h1 style="color:white; text-align:center;">Welcome to {{ title }} {% if user.is_authenticated %}
-                {{ user.name }} {% endif %} </h1>
+                <h1 > {{ title }} {% if user.is_authenticated %}
+                {{ user.name }} {% endif %} </h1><h6 style="color:aqua">({{version}})</h6>
                 {% if user.is_authenticated %}
-                <p><h3 style="text-align: center;">Please make your selection in the top menu.</h3></p>
+                
+               
+            {% if pic_num == 1 %}
+             <img src="{%  static 'img/1.jpg' %}" class="img-circle img-responsive center-block" alt="Cinque Terre" width="auto" height="100%" >
+
+             {% elif pic_num == 2 %}
+             <img src="{%  static 'img/2.jpg' %}" class="img-circle img-responsive center-block" alt="Cinque Terre" width="auto" height="100%" >
+
+             {% elif pic_num == 3 %}
+             <img src="{%  static 'img/3.jpg' %}" class="img-circle img-responsive center-block" alt="Cinque Terre" width="auto" height="100%" >
+            {% endif %}
+
+
+        <p><h3 style="text-align: center;">Please make your selection in the top menu</h3></p>
                 
 
                 {% else %}
                 
-                <p><h3 style="text-align: center;">Please log in or register to continue.</h3></p>
+                <p><h3 style="text-align: center;">Please log in or register to continue</h3></p>
                 {% endif %}
-               
-        </div>
 
     </div>
     </div>

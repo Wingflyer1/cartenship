@@ -11,7 +11,7 @@
 
         <div id="table-back" class="col-sm-8 col-sm-offset-2 col-xs-10" >
                 
-                <h1> List of Charterers <a href="{% url 'VoyageCalc:create_charterer' %}"><h4>(Add new charterer )</h4></a></h1>
+                <h1> List of Charterers <a href="{% url 'VoyageCalc:create_charterer' %}"><h4>(Add new charterer )</a></h4></h1>
 
                 
                 <table class="table table-striped table-inverse">
@@ -29,10 +29,10 @@
                         {% for object in object_list %}
                         
                             <tr>
-                                <td><a href="{% url 'VoyageCalc:edit-charterer' object.id %}">{{ object.name }}</a></td>
+                                <td><a href="{% url 'VoyageCalc:edit-charterer' object.id %}">{{ object.company_name }}</a></td>
                                 <th>{{ object.contact_person }}</th>
                                 <td>{{ object.switch_board }}</td>
-                                <td>{{ object.comment }}</td>
+                                <td>{{ object.comment|truncatechars:28 }}</td>
                             </tr>
                           
                         {% endfor %}

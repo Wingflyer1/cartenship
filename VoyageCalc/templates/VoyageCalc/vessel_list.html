@@ -11,7 +11,7 @@
 
         <div id="table-back" class="col-sm-8 col-sm-offset-2 col-xs-10" >
                 
-                <h1> List of Vessels <a href="{% url 'VoyageCalc:create_vessel' %}"><h4>(Add a vessel)</h4></a></h1>
+                <h1> List of Vessels <a href="{% url 'VoyageCalc:create_vessel' %}"><h4>(Add a vessel)</a></h4></h1>
 
                 
                 <table class="table table-striped table-inverse">
@@ -19,10 +19,9 @@
                         <tr>
                             <th>Vessel</th>
                             <th>Telephone</th>
-                            <th>Daily Cons Laden</th>
-                            <th>Daily Cons Ballast</th>
-                            <th>Cons Port MGO</th>
-                            <th>Cons Port IFO</th>
+                            <th>Usage laden</th>
+                            <th>Usage ballast</th>
+                            <th>Usage Port MGO</th>
                             <th>Comment</th>
 
                         </tr>
@@ -32,12 +31,11 @@
                         {% for object in object_list %}
                         
                             <tr>
-                                <td><a href="{% url 'VoyageCalc:edit-vessel' object.id %}">{{ object.name }}</a></td>
+                                <td><a href="{% url 'VoyageCalc:edit-vessel' object.id %}">{{ object.vessel_name }}</a></td>
                                 <th>{{ object.telephone }}</th>
-                                <td>{{ object.cons_lad }}</td>
-                                <td>{{ object.cons_bal }}</td>
-                                <td>{{ object.cons_por_mgo }}</td>
-                                <td>{{ object.cons_por_ifo }}</td>
+                                <th>{{ object.cons_lad }}</th>
+                                <th>{{ object.cons_bal }}</th>
+                                <th>{{ object.cons_por_mgo }}</th>
                                 <td>{{ object.comment|truncatechars:50 }}</td>
                             </tr>
                           

@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags %}
+
+{% block title %} C-Calc -> {{ title }}
+{% endblock title %}
+{% block head %}
+
+{% endblock head %}
+
+
+
+{% block body %}
+<div class="col-sm-4 col-sm-offset-4" align="center">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title"><h1> {{ title }} </h1></div>
+        </div>
+        <div class="panel-body">
+            
+            <form class="vertical" role="form" method="POST" action="" enctype="multipart/form-data">
+            
+                <h3><a href="{% url 'VoyageCalc:add_income' voyage.id %}?from={{ request.path|urlencode }}"><span class="glyphicon glyphicon-plus" style="color:green;"></span></a> Incomes | Expenses <a href="{% url 'VoyageCalc:add_cost' voyage.id %}?from={{ request.path|urlencode }}"><span class="glyphicon glyphicon-minus" style="color:red;"></span></a></h3>
+                <div class="col-sm-12">
+                <div class="col-sm-6">
+                  <table class="table table-bordered table-condensed">
+                    <thead>
+                      <tr>
+                        <th>What</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for income in incomes %}
+                      <tr style="color:green;">
+                        <td>{{ income.income_type }}</td>
+                        <td>{{ income.income_nok }}</td>
+                      </tr>
+                    {% endfor %}
+                    <tr>
+                    <td>Gross Fr.</td><td> {{ voyage.voyage_incomes }} </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  </div>
+                  <div class="col-sm-6">
+                    <table class="table table-bordered table-condensed">
+                    <thead>
+                      <tr>
+                        <th>What</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for cost in costs %}
+                      <tr style="color:red;">
+                        <td>{{ cost.cost_type }}</td>
+                        <td>{{ cost.cost_nok }}</td>
+                      </tr>
+
+                    {% endfor %}
+                    <tr style="color:red;"><td>Bunkers</td><td>{{ voyage.bunkers }}</td></tr>
+                    <tr style="color:red;"><td>Commission</td><td>{{ voyage.commission }}</td></tr>
+                    <tr>
+                    <td>Total Exp.</td><td> {{ voyage.voyage_costs }} </td>
+                    </tr>
+
+                    </tbody>
+                  </table>
+                  
+                  </div>
+                  <div class="col-sm-12" style="text-align:center;">
+                           <p style="font-size:25px; font-weight: bold; color:{{ voyage.color_net }};"> Net Freight: {{ voyage.net_freight }}</p>
+                  </div>
+                  </div>
+
+
+                  {% csrf_token %}
+                {{form|crispy}}
+                <hr>
+                </div>            
+                <p>   
+                </p>
+                <hr>
+                <input type = submit class="btn btn-success" style="width:100%;" value="{{ sub_btn }}" />
+            </form>
+
+        </div>          
+      </div>
+</div>
+
+{% block footer %}
+{% endblock footer %}
+{% endblock body %}

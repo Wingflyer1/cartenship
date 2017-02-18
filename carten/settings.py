@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -43,6 +42,7 @@ INSTALLED_APPS = [
     'VoyageCalc.apps.VoyagecalcConfig',
     # third party apps
     'crispy_forms',
+    
 ]
 
 MIDDLEWARE = [
@@ -139,3 +139,7 @@ LOGIN_REDIRECT_URL = "/"
 
 # Accepts more date formats
 USE_L10N=False
+
+
+# current version
+VERSION = 'test version: 0.1'

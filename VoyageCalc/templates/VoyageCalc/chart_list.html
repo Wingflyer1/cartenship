@@ -10,21 +10,20 @@
         {% if user.is_authenticated %}
         <div id="table-back" class="col-sm-8 col-sm-offset-2 col-xs-10" >
                 
-                <h1> List of Charts <a href="{% url 'VoyageCalc:create_chart' %}"><h4>(Add a chart)</h4></a></h1><a href="{% url 'VoyageCalc:finished-charts' %}"> (view finished charts)</a>
+                <h1> List of Charts <a href="{% url 'VoyageCalc:create_chart' %}"><h4>(Add a chart)</a></h4></h1><a href="{% url 'VoyageCalc:finished-charts' %}"> (view finished charts)</a>
 
                 
                 <table class="table table-striped table-inverse">
                     <thead>
                         <tr>
                             <th>Chart No</th>
+                            <th>Voyages completed</th>
                             <th>Charterer</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Countdown</th>
                             <th>Creator/Updated</th>
-                            <th>Comment</th>
-                            
-
+                            <th>Comment</th>                            
                         </tr>
                     </thead>
 
@@ -32,7 +31,8 @@
                         {% for object in object_list %}
                         
                             <tr>
-                                <td><a href="{% url 'VoyageCalc:edit-chart' object.id %}">{{ object.id }}</a></td>
+                                <td><a href="{% url 'VoyageCalc:edit-chart' object.id %}">{{ object.chart_number }}</a></td>
+                                <td>{{object.number_of_voyages }}</td>
                                 <td>{{ object.charterer }}</td>
                                 <td>{{ object.date_start }}</td>
                                 <td>{{ object.date_end }}</td>                                
