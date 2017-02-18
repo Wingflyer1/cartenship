@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'VoyageCalc.apps.VoyagecalcConfig',
     # third party apps
     'crispy_forms',
-    # 'bootstrap3_datetime',
     
 ]
 

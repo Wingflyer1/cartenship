@@ -1,6 +1,7 @@
 from django import forms
 from .models import Charterer, Port, Vessel, Chart, Voyage, Income, Cost
-from datetime import date
+import datetime
+from datetime import date, datetime
 
 class ChartererCreateForm(forms.ModelForm):
 
@@ -50,7 +51,22 @@ class ChartCreateForm(forms.ModelForm):
         exclude = [
                 'created_by',
                 'updated_by',
+                'created',
                 'finished',
+                'updated',
+                'deleted',
+        ]
+
+class ChartEditForm(forms.ModelForm):
+
+    date_start = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
+    date_end = forms.DateField(widget=forms.DateInput, initial='ie. 12 apr 1977')
+    
+    class Meta:
+        model = Chart
+        exclude = [
+                'created_by',
+                'updated_by',
                 'created',
                 'updated',
                 'deleted',
@@ -83,19 +99,38 @@ class IncomeForm(forms.ModelForm):
                 ('OFI','Other Freight Incomes'),
                 ('DD', 'Demurrage/Despatch'),
         )
-
     income_type = forms.ChoiceField(choices=INCOME_TYPES)
+
+    CURRENCY = (
+            ('USD','US Dollar'),
+            ('EUR','Euro'),
+            ('SEK','Swedish Krone'),
+            ('DKK','Danisk Krone'),
+            ('NOK','Norw Krone'),
+            )
+    currency = forms.ChoiceField(choices=CURRENCY, initial='NOK')
 
     class Meta:   
         model = Income
-        exclude = [
-                    'created_by',
-                    'created',
-                    'updated',
-                    'voyage',
+        fields = [
+                    'currency',
+                    'exchange_rate',
+                    'income_type',
+                    'income_amount',
         ]
 
 class CostForm(forms.ModelForm):
+
+    class Meta:   
+        model = Cost
+        fields = [
+                    'currency',
+                    'exchange_rate',
+                    'cost_type',
+                    'cost_amount',
+        ]
+
+
     COST_TYPES = (
                 ('PD','Port Dispursement'),
                 ('ME','Misc. Expenses'),
@@ -105,11 +140,11 @@ class CostForm(forms.ModelForm):
 
     cost_type = forms.ChoiceField(choices=COST_TYPES)
 
-    class Meta:   
-        model = Cost
-        exclude = [
-                    'created_by',
-                    'created',
-                    'updated',
-                    'voyage',
-        ]
+    CURRENCY = (
+                ('USD','US Dollar'),
+                ('EUR','Euro'),
+                ('SEK','Swedish Krone'),
+                ('DKK','Danisk Krone'),
+                ('NOK','Norw Krone'),
+                )
+    currency = forms.ChoiceField(choices=CURRENCY, initial='NOK')

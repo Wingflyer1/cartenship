@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Charterer, Port, Vessel, Chart, Voyage, Income, Cost
-from .forms import ChartererCreateForm, PortCreateForm, VesselCreateForm, ChartCreateForm, VoyageCreateForm, IncomeForm, CostForm
+from .forms import ChartererCreateForm, PortCreateForm, VesselCreateForm, ChartCreateForm, ChartEditForm, VoyageCreateForm, IncomeForm, CostForm
 import random
 from django.contrib.auth.models import User
 from carten import settings
@@ -51,6 +51,9 @@ def create_charterer(request):
             company_name += (i.capitalize()) + " "
         charterer.company_name = company_name
         
+        contact_person = form.cleaned_data.get('contact_person')
+        charterer.contact_person = contact_person
+
         address = form.cleaned_data.get('address')
         charterer.address = address
 
@@ -100,6 +103,9 @@ def edit_charterer(request, id=None):
         for i in split_name:
             company_name += (i.capitalize()) + " "
         charterer.company_name = company_name
+
+        contact_person = form.cleaned_data.get('contact_person')
+        charterer.contact_person = contact_person
         
         address = form.cleaned_data.get('address')
         charterer.address = address
@@ -407,7 +413,7 @@ def create_chart(request):
 def edit_chart(request, id=None):
     title = 'Update Chart'
     chart = Chart.objects.get(id=id)
-    form = ChartCreateForm(request.POST or None, instance=chart)
+    form = ChartEditForm(request.POST or None, instance=chart)
     user = request.user
     sub_btn = "Update"
     
@@ -440,6 +446,9 @@ def edit_chart(request, id=None):
 
         comment = form.cleaned_data.get('comment')
         chart.comment = comment
+
+        finished = form.cleaned_data.get('finished')
+        chart.finished = finished
 
         chart.save()
 
@@ -645,6 +654,10 @@ def add_cost(request, id=None):
     form = CostForm(request.POST or None)
     user = request.user
     voyage = Voyage.objects.get(id=id)
+    currencies = [('USD', 0.12),
+                    ('EUR', 0.11),
+                    ('SEK', 1.07),
+                    ('DKK', 0.84),]
     
     # get url of voyage-page
     came_from_page = request.GET.get('from', None)
@@ -679,7 +692,8 @@ def add_cost(request, id=None):
         'form': form,
         'title': title,
         'sub_btn': sub_btn,
-        'came_from_page': came_from_page
+        'came_from_page': came_from_page,
+        'currencies': currencies,
     }
 
     return render(request, "VoyageCalc/form.html", context)

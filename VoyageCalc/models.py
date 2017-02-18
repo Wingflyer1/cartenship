@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import date, timedelta, datetime
+from forex_python.converter import CurrencyRates
 
 class Charterer(models.Model):
 
@@ -217,10 +218,11 @@ class Voyage(models.Model):
 
 class Income(models.Model):
 
+    exchange_rate = models.FloatField(blank=False, default=1)
+    currency = models.CharField(max_length=3, default='NOK')
     income_type = models.CharField(max_length=15)
     income_amount = models.FloatField(blank=False, default=0)
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
-    # income_reference = CharField(max_length=200)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, blank=True)
@@ -234,12 +236,23 @@ class Income(models.Model):
     def __unicode__(self):
         return '{}'.format(self.id)
 
+    def income_nok(self):
+        currency = self.currency
+        if currency == 'NOK':
+            return self.income_amount
+        else:
+            rate = self.exchange_rate
+            amount = self.income_amount
+            result = amount/rate
+            return result
+
 class Cost(models.Model):
 
+    exchange_rate = models.FloatField(blank=False, default=1)
+    currency = models.CharField(max_length=3, default='NOK')
     cost_type = models.CharField(max_length=15)
     cost_amount = models.FloatField(blank=False, default=0)
     voyage = models.ForeignKey(Voyage, on_delete=models.CASCADE)
-    # income_reference = CharField(max_length=200)
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True, auto_now=False)
     updated = models.DateTimeField(auto_now_add=False, auto_now=True, blank=True)
@@ -249,6 +262,16 @@ class Cost(models.Model):
 
     def __unicode__(self):
         return '{}'.format(self.id)
+
+    def cost_nok(self):
+        currency = self.currency
+        if currency == 'NOK':
+            return self.cost_amount
+        else:
+            rate = self.exchange_rate
+            amount = self.cost_amount
+            result = amount/rate
+            return result
 
     class Meta:
         ordering = ['-id']

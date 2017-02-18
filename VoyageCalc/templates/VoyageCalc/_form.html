@@ -12,12 +12,8 @@
 
 {% block body %}
 
-{% if form.cost_type %}
-{% include 'voyagecalc/rates.html' %}
-<div class="col-sm-2 col-sm-offset-5" align="center">
-{% else %}
 <div class="col-sm-4 col-sm-offset-4" align="center">
-{% endif %}
+
     <div class="panel panel-default">
         <div class="panel-heading">
           <div class="panel-title"><h1> {{ title }} </h1></div>
@@ -33,11 +29,9 @@
                             
                         </form>
 
-
-        </div>
-
+        </div>          
       </div>
-
+}
 </div>
 
 {% block footer %}
