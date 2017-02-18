@@ -654,10 +654,10 @@ def add_cost(request, id=None):
     form = CostForm(request.POST or None)
     user = request.user
     voyage = Voyage.objects.get(id=id)
-    currencies = [('USD', 0.12),
-                    ('EUR', 0.11),
-                    ('SEK', 1.07),
-                    ('DKK', 0.84),]
+    currencies = [('USD', 0.1211),
+                    ('EUR', 0.112),
+                    ('SEK', 1.073),
+                    ('DKK', 0.843),]
     
     # get url of voyage-page
     came_from_page = request.GET.get('from', None)
